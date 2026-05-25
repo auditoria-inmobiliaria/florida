@@ -1,0 +1,1663 @@
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnóstico de Leads — Florida | Marcos Rodríguez</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CPB768686Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CPB768686Z');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#060606;margin:0;padding:0;overflow-x:hidden}
+:root{
+  --g:#D4AF37;--g2:#e8c84a;--gbg:rgba(212,175,55,0.08);--gbr:rgba(212,175,55,0.28);
+  --display:'Cormorant Garamond',Georgia,serif;
+  --f:'Outfit',system-ui,sans-serif;
+}
+body{font-family:var(--f);color:#fff;min-height:100vh;background:#060606}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
+.hero-bg{position:fixed;inset:0;background:radial-gradient(circle at 50% 50%, rgba(212,175,55,0.05), transparent 70%);z-index:0;pointer-events:none;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at 50% 50%, black, transparent 80%);transform:perspective(500px) rotateX(60deg) translateY(-100px);transform-origin:top;opacity:0.4}
+.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:600px;height:600px;background:radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);filter:blur(60px);animation:pulseGlow 8s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{opacity:0.5;transform:translate(-50%, -50%) scale(1)}50%{opacity:1;transform:translate(-50%, -50%) scale(1.1)}}
+.hero-scan{position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(to right, transparent, rgba(212,175,55,0.3), transparent);z-index:1;animation:scanLine 4s linear infinite;pointer-events:none}
+@keyframes scanLine{0%{top:-10%}100%{top:110%}}
+.ui-tag{position:fixed;font-size:9px;font-family:var(--f);color:rgba(212,175,55,0.4);letter-spacing:0.2em;text-transform:uppercase;z-index:10;pointer-events:none}
+.ui-tag-tl{top:30px;left:40px}
+.ui-tag-tr{top:30px;right:40px}
+.ui-tag-bl{bottom:30px;left:40px}
+.ui-tag-br{bottom:30px;right:40px}
+.loss-ticker{position:fixed;top:30px;right:40px;text-align:right;z-index:11}
+.loss-ticker-val{font-size:14px;color:var(--g);font-family:var(--display);margin-bottom:2px}
+.loss-ticker-lbl{font-size:8px;color:#444;text-transform:uppercase;letter-spacing:0.1em}
+/* Mouse reactive lighting */
+.mouse-light{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0;transition:opacity 1.5s;background:radial-gradient(700px at var(--mx,50%) var(--my,50%),rgba(212,175,55,0.035),transparent 70%)}
+.mouse-light.visible{opacity:1}
+.hidden{display:none!important}
+#ph-diag,#ph-deck{width:100%;min-height:100vh}
+#ph-deck.revealing{animation:deckReveal .7s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes deckReveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.ph-screen{width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:32px 24px;text-align:center}
+/* ── WELCOME SCREEN ── */
+.wlc-access{font-size:10px;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:#555;margin-bottom:52px;opacity:0.8}
+.wlc-h1{font-size:clamp(38px,10vw,68px);font-weight:400;line-height:.92;letter-spacing:-.03em;color:#fff;font-family:var(--display);max-width:600px;margin-bottom:0;opacity:1;transition:opacity 1s ease, transform 1s ease}
+.wlc-h1.revealing{opacity:0;transform:translateY(10px)}
+.wlc-h1 em{font-style:italic;color:var(--g);text-shadow: 0 0 20px rgba(212,175,55,0.3)}
+.wlc-divider{width:24px;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.6),transparent);margin:30px auto}
+.wlc-brief{font-size:15px;color:#666;line-height:1.85;margin-bottom:38px;max-width:340px;letter-spacing:.01em;font-weight:300}
+.wlc-trust{display:flex;gap:18px;margin-bottom:38px;flex-wrap:wrap;justify-content:center}
+.wlc-trust-item{font-size:10px;color:#444;letter-spacing:.12em;text-transform:uppercase;opacity:0.7}
+.wlc-trust-dot{color:#222;margin-right:6px}
+/* Diag animations */
+.diag-fade{opacity:0;transform:translateY(12px);animation:diagIn .75s cubic-bezier(.22,1,.36,1) calc(var(--di)*90ms + 100ms) forwards}
+@keyframes diagIn{to{opacity:1;transform:translateY(0)}}
+.btn-breathe{animation:diagIn .75s cubic-bezier(.22,1,.36,1) calc(490ms + 100ms) forwards, breatheBtn 3.2s ease-in-out 1.6s infinite}
+@keyframes breatheBtn{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,0),0 8px 24px rgba(212,175,55,.18)}50%{box-shadow:0 0 20px 6px rgba(212,175,55,.14),0 8px 24px rgba(212,175,55,.18)}}
+.btn-primary{font-size:12px;font-weight:600;padding:15px 34px;border-radius:10px;background:linear-gradient(160deg,#e8c84a 0%,#D4AF37 60%,#b8942e 100%);color:#060606;border:none;cursor:pointer;font-family:var(--f);transition:all .22s cubic-bezier(.22,1,.36,1);letter-spacing:.1em;text-transform:uppercase;box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 8px 24px rgba(212,175,55,.18),0 2px 8px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.07),transparent 50%);pointer-events:none;border-radius:10px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 16px 36px rgba(212,175,55,.28),0 4px 12px rgba(0,0,0,.6)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{font-size:10px;color:#2a2a2a;background:none;border:none;cursor:pointer;font-family:var(--f);margin-top:18px;transition:color .2s;display:block;letter-spacing:.12em;text-transform:uppercase}
+.btn-ghost:hover{color:#666}
+/* ── QUESTION SLIDE ── */
+.q-entering{animation:qSlide .38s cubic-bezier(.22,1,.36,1)}
+@keyframes qSlide{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+#sc-q{justify-content:flex-start;padding-top:44px;text-align:left}
+.q-wrap{width:100%;max-width:600px;margin:0 auto}
+.q-prog-bar{height:1px;background:#111;border-radius:2px;margin-bottom:34px;overflow:hidden}
+.q-prog-fill{height:100%;background:var(--g);transition:width .5s cubic-bezier(.22,1,.36,1)}
+.q-step-lbl{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#333;margin-bottom:12px}
+.q-title{font-size:clamp(20px,5vw,28px);font-weight:400;letter-spacing:-.025em;color:#fff;margin-bottom:6px;font-family:var(--display);line-height:1.1}
+.q-sub{font-size:13px;color:#444;margin-bottom:22px;letter-spacing:.01em}
+.q-opts{display:grid;gap:6px}
+.q-opt{display:flex;align-items:center;gap:14px;padding:13px 17px;background:#070707;border:1px solid #141414;border-radius:9px;cursor:pointer;transition:all .18s cubic-bezier(.22,1,.36,1);text-align:left}
+.q-opt:hover{border-color:rgba(212,175,55,.2);background:#0c0c0c;transform:translateX(2px)}
+.q-opt.selected{border-color:var(--g);background:var(--gbg)}
+.q-opt-ico{font-size:15px;flex-shrink:0;width:20px;text-align:center;opacity:.6}
+.q-opt.selected .q-opt-ico{opacity:1}
+.q-opt-label{font-size:14px;font-weight:400;color:#999;display:block}
+.q-opt-sub{font-size:11px;color:#444;display:block;margin-top:1px}
+.q-opt.selected .q-opt-label{color:#fff}
+.q-back{font-size:10px;color:#333;background:none;border:none;cursor:pointer;font-family:var(--f);margin-top:18px;display:block;transition:color .18s;letter-spacing:.1em;text-transform:uppercase}
+.q-back:hover{color:#777}
+/* ── PROCESSING SCREEN ── */
+#sc-proc{justify-content:center;align-items:flex-start;padding-left:max(32px, calc(50vw - 220px));padding-right:32px;text-align:left}
+.proc-label{font-size:9px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#2a2a2a;margin-bottom:36px}
+.proc-title{font-size:clamp(32px,9vw,52px);font-weight:400;font-family:var(--display);color:#fff;letter-spacing:-.03em;margin-bottom:48px;line-height:.95}
+.proc-steps{display:flex;flex-direction:column;gap:0;max-width:400px}
+.proc-step{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #0a0a0a;font-size:14px;color:#1e1e1e;letter-spacing:.02em;transition:color .5s,border-color .5s}
+.proc-step:last-child{border-bottom:none}
+.proc-step.active{color:#777}
+.proc-step.done{color:#333}
+.proc-dot{width:4px;height:4px;border-radius:50%;background:#1a1a1a;flex-shrink:0;transition:background .5s,box-shadow .5s}
+.proc-step.active .proc-dot{background:var(--g);box-shadow:0 0 8px rgba(212,175,55,.5);animation:dotpulse 1.1s ease infinite}
+.proc-step.done .proc-dot{background:#2a2a2a}
+@keyframes dotpulse{0%,100%{opacity:1}50%{opacity:.3}}
+.proc-bar{height:1px;background:#0d0d0d;border-radius:2px;margin-top:44px;overflow:hidden;max-width:400px}
+.proc-bar-fill{height:100%;background:linear-gradient(to right,rgba(212,175,55,.15),rgba(212,175,55,.6));border-radius:2px;width:0%;transition:width .6s cubic-bezier(.22,1,.36,1)}
+/* ── RESULTS SCREEN ── */
+#sc-res{justify-content:flex-start;padding-top:36px;text-align:left}
+.res-wrap{width:100%;max-width:720px;margin:0 auto}
+.res-kicker{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,55,.6);margin-bottom:14px}
+.res-h1{font-size:clamp(30px,9vw,52px);font-weight:400;letter-spacing:-.035em;color:#fff;margin-bottom:8px;font-family:var(--display);line-height:.95;white-space:pre-wrap}
+.res-sub{font-size:15px;color:#555;line-height:1.85;margin-bottom:28px;max-width:520px}
+.res-diag-box{background:transparent;border-top:1px solid #111;border-bottom:1px solid #111;padding:16px 0;margin-bottom:24px}
+.res-diag-lbl{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#2a2a2a;margin-bottom:9px}
+.res-diag-txt{font-size:14px;color:#888;line-height:1.8}
+.res-diag-txt strong{color:#ccc}
+.loss-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#0d0d0d;margin-bottom:24px;border-radius:10px;overflow:hidden}
+.loss-card{background:#070707;padding:22px 16px}
+.loss-lbl{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#333;margin-bottom:10px}
+.loss-val{font-size:clamp(22px,5vw,32px);font-weight:300;letter-spacing:-.03em;font-family:var(--display)}
+.loss-val.red{color:#a84a4a}
+.loss-val.gld{color:var(--g)}
+.loss-val.wht{color:#888}
+.plan-rec-box{background:#080808;border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:22px 22px;margin-bottom:20px;position:relative;overflow:hidden}
+.plan-rec-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.45),transparent)}
+.plan-rec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.plan-rec-title{font-size:15px;font-weight:500;color:#e0e0e0;letter-spacing:-.01em}
+.plan-rec-badge{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#060606;background:var(--g);padding:3px 10px;border-radius:20px}
+.plan-rec-details{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+.prd{background:#0c0c0c;border-radius:8px;padding:11px 13px}
+.prd-lbl{font-size:9px;color:#3a3a3a;margin-bottom:4px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.prd-val{font-size:13px;font-weight:500;color:#aaa}
+.why-rec{font-size:14px;color:#666;line-height:1.75;padding:12px 0 14px;border-top:1px solid #111}
+.why-rec strong{color:#999}
+.res-cta-row{display:flex;gap:10px;flex-wrap:wrap}
+/* ── SCROLL DECK ── */
+.wrap{max-width:900px;margin:0 auto;width:100%;padding:0 44px;box-sizing:border-box}
+.page-scroll{width:100%;background:#060606}
+.ps-nav{position:sticky;top:0;z-index:100;background:rgba(6,6,6,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.04);padding:12px 0}
+.ps-nav-in{display:flex;align-items:center;gap:16px}
+.ps-brand-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ps-brand-avatar{width:28px;height:28px;border-radius:50%;background:var(--g);color:#060606;font-size:9px;font-weight:800;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ps-brand-name{font-size:11px;font-weight:600;color:#bbb;letter-spacing:.01em;line-height:1}
+.ps-brand-role{font-size:9px;color:#333;margin-top:2px;letter-spacing:.05em}
+.ps-links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+.ps-links::-webkit-scrollbar{display:none}
+.ps-link{font-size:12px;color:#333;padding:6px 11px;border-radius:20px;text-decoration:none;white-space:nowrap;transition:all .18s;letter-spacing:.04em}
+.ps-link:hover{color:#bbb;background:#0d0d0d}
+.ps-nav-cta{font-size:10px;font-weight:700;color:#060606;background:linear-gradient(160deg,#e8c84a,#D4AF37 70%,#b8942e);padding:7px 15px;border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:all .2s;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 4px 12px rgba(212,175,55,.18)}
+.ps-nav-cta:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 8px 20px rgba(212,175,55,.28)}
+.ps-section{padding:72px 0 64px;scroll-margin-top:58px}
+.ps-divider{height:1px;background:linear-gradient(to right,transparent,#0d0d0d 20%,#0d0d0d 80%,transparent);margin:0 44px}
+.page-footer{padding:20px 0 32px;text-align:center;border-top:1px solid #0d0d0d}
+.page-footer a,.page-footer span{font-size:11px;color:#333;text-decoration:none;transition:color .18s}
+.page-footer a:hover{color:var(--g)}
+@media(max-width:680px){.ps-links{display:none}}
+@media(max-width:640px){
+  /* Hide corner labels on mobile - overlap with content */
+  .ui-tag-tl,.ui-tag-tr,.ui-tag-bl,.ui-tag-br{display:none}
+  /* Center loss ticker at bottom on mobile */
+  .loss-ticker{top:auto;bottom:24px;right:50%;transform:translateX(50%);text-align:center;background:rgba(6,6,6,.8);padding:6px 12px;border-radius:20px;border:1px solid rgba(212,175,55,.12)}
+}
+@media(max-width:390px){
+.ph-screen{padding:22px 18px}
+.ps-section{padding:48px 0 40px}
+.wrap{padding:0 18px}
+.ps-divider{margin:0 18px}
+}
+/* Typography scale */
+.kicker{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,55,.55);margin-bottom:12px}
+.hero{font-size:clamp(28px,8vw,50px);font-weight:400;line-height:.95;letter-spacing:-.03em;margin:0 0 14px;color:#fff;font-family:var(--display);white-space:pre-wrap}
+.hero-sub{font-size:15px;color:#777;line-height:1.85;margin-bottom:20px;max-width:500px}
+.sec{font-size:clamp(24px,6vw,36px);font-weight:400;letter-spacing:-.03em;margin:0 0 20px;color:#fff;line-height:1;font-family:var(--display)}
+.foot-note{font-size:12px;color:#555;margin-top:12px;line-height:1.6}
+/* Differentiator */
+.dif-section{margin-top:32px;max-width:560px}
+.dif-col{display:flex;flex-direction:column}
+.dif-item{display:flex;gap:24px;padding:24px 0;border-bottom:1px solid #0a0a0a}
+.dif-item:last-child{border-bottom:none}
+.dif-num{font-size:9px;font-weight:600;color:#222;letter-spacing:.14em;margin-top:4px;flex-shrink:0;width:20px}
+.dif-title{font-size:14px;font-weight:500;color:#ccc;margin-bottom:7px;letter-spacing:-.01em;line-height:1.3}
+.dif-desc{font-size:14px;color:#555;line-height:1.75}
+/* Include */
+.inc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.inc-item{display:flex;align-items:flex-start;gap:11px;background:#070707;border:1px solid #111;border-radius:9px;padding:13px 15px;transition:all .22s}
+.inc-item:hover{border-color:rgba(212,175,55,.12);transform:translateY(-1px)}
+.inc-label{font-size:13px;font-weight:500;color:#bbb;display:block;margin-bottom:2px}
+.inc-sub{font-size:11px;color:#555;display:block;line-height:1.4}
+.chk{color:var(--g);font-size:10px;flex-shrink:0;margin-top:3px;opacity:.6}
+.fl-callout{margin-top:13px;background:#070707;border:1px solid #111;border-radius:9px;padding:13px 17px;display:flex;align-items:flex-start;gap:11px}
+.fl-callout-ico{font-size:15px;flex-shrink:0;margin-top:1px;opacity:.5}
+.fl-callout-txt{font-size:13px;color:#555;line-height:1.7}
+.fl-callout-txt strong{color:#999}
+/* Plans */
+.mkt-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,55,.5);border:1px solid rgba(212,175,55,.15);padding:4px 12px;border-radius:20px;margin-bottom:18px}
+.plans-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;align-items:start}
+.plan-c{background:#070707;border:1px solid #111;border-radius:12px;padding:20px 16px;transition:all .22s;opacity:.55}
+.plan-c:hover{border-color:#1e1e1e;opacity:.7}
+.plan-c.rec-highlight{background:#090800;border:1px solid rgba(212,175,55,.28);border-radius:14px;padding:28px 20px;opacity:1;box-shadow:0 0 0 1px rgba(212,175,55,.05),0 28px 64px rgba(0,0,0,.7);position:relative;z-index:2;transform:translateY(-4px)}
+.plan-c.rec-highlight::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.5),transparent)}
+.plan-badge{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#060606;background:var(--g);padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.plan-nm{font-size:9px;color:#333;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
+.rec-highlight .plan-nm{color:rgba(212,175,55,.4)}
+.plan-p{font-size:clamp(22px,5vw,28px);font-weight:300;letter-spacing:-.03em;color:#555;margin:4px 0 14px;line-height:1;font-family:var(--display)}
+.plan-p sub{font-size:10px;color:#444;font-weight:400;letter-spacing:0;vertical-align:baseline;font-family:var(--f)}
+.rec-highlight .plan-p{font-size:clamp(30px,7vw,40px);color:#fff}
+.rec-highlight .plan-p sub{color:#666;font-size:12px}
+.pr{display:flex;justify-content:space-between;font-size:11px;padding:7px 0;border-bottom:1px solid #0d0d0d;color:#444}
+.pr:last-child{border:none}
+.pr em{color:#999;font-style:normal}
+.psel{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.ps-btn{font-size:10px;padding:6px 13px;cursor:pointer;border-radius:20px;background:none;border:1px solid #141414;color:#333;font-family:var(--f);transition:all .18s;letter-spacing:.06em}
+.ps-btn:hover{border-color:rgba(212,175,55,.2);color:var(--g)}
+.ps-btn.on{background:rgba(212,175,55,.07);color:var(--g);border-color:rgba(212,175,55,.3);font-weight:600}
+/* Timeline */
+.tl-header-note{font-size:12px;color:#444;margin-bottom:14px;line-height:1.7;padding:12px 15px;background:#070707;border:1px solid #0d0d0d;border-radius:8px}
+.tl-header-note strong{color:#666}
+.tl-range-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;padding:10px 14px;background:#070707;border:1px solid #0d0d0d;border-radius:9px}
+.tl-range-label{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#444}
+.tl-range-val{font-size:16px;font-weight:300;color:var(--g);font-family:var(--display);letter-spacing:-.01em}
+.tl-g{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.tl-m{background:#070707;border:1px solid #0d0d0d;border-radius:10px;padding:15px 13px;transition:border-color .2s}
+.tl-m:hover{border-color:#1a1a1a}
+.tl-h{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#333;margin-bottom:5px}
+.tl-phase{font-size:12px;font-weight:500;color:rgba(212,175,55,.7);margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid #0d0d0d}
+.tl-focus{font-size:11px;color:#555;margin-bottom:9px;line-height:1.5}
+.tr{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid #0a0a0a;color:#555}
+.tr:last-child{border:none}
+.tr .tv{color:#ccc;font-weight:500}
+.tr.hi .tv{color:var(--g)}
+.tr .tl{font-size:10px}
+/* Sistema */
+.sys-row{display:flex;gap:14px;align-items:flex-start;padding:13px 10px;border-radius:9px;margin:0 -10px;border-bottom:1px solid #0a0a0a;transition:background .18s}
+.sys-row:hover{background:#080808}
+.sys-row:last-child{border:none}
+.s-ico{width:38px;height:38px;background:#0c0c0c;border:1px solid #141414;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:border-color .18s}
+.sys-row:hover .s-ico{border-color:rgba(212,175,55,.18)}
+.s-tit{font-size:13px;font-weight:500;color:#ccc;margin-bottom:3px}
+.s-desc{font-size:12px;color:#555;line-height:1.7}
+/* Florida */
+.fl-hero-stat{display:flex;align-items:flex-start;gap:32px;padding:36px 0 30px;border-bottom:1px solid #0d0d0d;margin-bottom:28px}
+.fl-hero-num{font-size:clamp(64px,16vw,100px);font-weight:300;color:var(--g);font-family:var(--display);letter-spacing:-.04em;line-height:1;flex-shrink:0;filter:drop-shadow(0 0 40px rgba(212,175,55,.1))}
+.fl-hero-right{}
+.fl-hero-lbl{font-size:15px;font-weight:400;color:#ccc;line-height:1.4;margin-bottom:10px;letter-spacing:-.01em}
+.fl-hero-sub{font-size:14px;color:#555;line-height:1.75}
+.fl-sub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fl-sub-stat{padding:20px 0;border-top:1px solid #0a0a0a}
+.fl-sub-num{font-size:30px;font-weight:300;color:#555;font-family:var(--display);letter-spacing:-.02em;margin-bottom:7px}
+.fl-sub-lbl{font-size:10px;font-weight:600;color:#555;margin-bottom:5px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase}
+.fl-sub-desc{font-size:13px;color:#444;line-height:1.65}
+@media(max-width:620px){
+.fl-hero-stat{flex-direction:column;gap:12px}
+.fl-hero-num{font-size:clamp(52px,18vw,72px)}
+.fl-sub-grid{grid-template-columns:1fr}
+}
+.fl-advantage{background:#070707;border:1px solid #0d0d0d;border-left:2px solid rgba(212,175,55,.35);border-radius:0 9px 9px 0;padding:13px 17px}
+.fl-adv-title{font-size:12px;font-weight:600;color:#ccc;margin-bottom:8px}
+.fl-adv-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#555;padding:5px 0;border-bottom:1px solid #0a0a0a}
+.fl-adv-row:last-child{border:none}
+.fl-adv-ico{color:var(--g);flex-shrink:0;font-size:10px;opacity:.5}
+/* ROI */
+.roi-g{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:16px}
+.roi-c{background:#070707;border:1px solid #0d0d0d;border-radius:9px;padding:14px 15px;transition:border-color .2s}
+.roi-c:hover{border-color:#1a1a1a}
+.roi-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#333;margin-bottom:7px}
+.roi-val{font-size:24px;font-weight:300;letter-spacing:-.025em;color:#888;font-family:var(--display)}
+.roi-val.gld{color:var(--g)}
+/* Simulator */
+.sim-box{background:#070707;border:1px solid #0d0d0d;border-radius:12px;padding:22px 24px}
+.sim-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.sim-ttl{font-size:13px;font-weight:500;color:#ccc}
+.sim-badge{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--g);border:1px solid rgba(212,175,55,.18);padding:3px 9px;border-radius:20px;opacity:.7}
+.sim-sub{font-size:11px;color:#444;margin-bottom:16px;letter-spacing:.01em}
+.sim-selectors{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.sim-sel-group{display:flex;flex-direction:column;gap:7px}
+.sim-sel-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#444}
+.sim-btns{display:flex;gap:5px;flex-wrap:wrap}
+.comm-btn{font-size:11px;padding:7px 12px;cursor:pointer;border-radius:20px;background:none;border:1px solid #141414;color:#444;font-family:var(--f);transition:all .18s}
+.comm-btn:hover{border-color:rgba(212,175,55,.2);color:var(--g)}
+.comm-btn.on{background:rgba(212,175,55,.06);color:var(--g);border-color:rgba(212,175,55,.28);font-weight:600}
+.sim-res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sim-card{background:#0c0c0c;border:1px solid #111;border-radius:9px;padding:13px 13px}
+.sim-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#333;margin-bottom:7px}
+.sim-num{font-size:26px;font-weight:300;color:#888;font-family:var(--display);letter-spacing:-.025em}
+.sim-num.pos{color:var(--g)}
+.sim-num.neg{color:#a04040}
+/* FAQ */
+.faq-wrap{margin-top:4px}
+.faq-item{border-bottom:1px solid #0a0a0a}
+.faq-item:first-child{border-top:1px solid #0a0a0a}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 4px;cursor:pointer;font-size:15px;font-weight:400;color:#888;user-select:none;transition:color .18s;letter-spacing:-.005em}
+.faq-q:hover{color:#fff}
+.faq-item.open .faq-q{color:var(--g)}
+.faq-arr{font-size:9px;color:#333;transition:transform .22s;flex-shrink:0;margin-left:12px}
+.faq-item.open .faq-arr{transform:rotate(180deg);color:var(--g)}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .32s ease}
+.faq-item.open .faq-body{max-height:800px}
+.faq-inner{font-size:14px;color:#555;line-height:1.9;padding:0 4px 18px}
+.faq-inner strong{color:#999;font-weight:500}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--g);cursor:pointer;border:2px solid #060606;box-shadow:0 0 0 2px rgba(212,175,55,.2)}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--g);cursor:pointer;border:2px solid #060606}
+.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:16px}
+.stack-item{background:#070707;border:1px solid #0d0d0d;border-radius:9px;padding:14px;transition:border-color .2s}
+.stack-item:hover{border-color:#1e1e1e}
+.stack-tool{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(212,175,55,.6);margin-bottom:4px}
+.stack-desc{font-size:12px;color:#555;line-height:1.6}
+.process-30{margin-bottom:18px}
+.p30-title{font-size:12px;font-weight:600;color:#ccc;margin-bottom:10px}
+.p30-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #0a0a0a}
+.p30-row:last-child{border:none}
+.p30-day{font-size:10px;font-weight:600;color:rgba(212,175,55,.45);min-width:52px;flex-shrink:0;padding-top:2px;letter-spacing:.05em}
+.p30-txt{font-size:14px;color:#555;line-height:1.6}
+.p30-txt strong{color:#999}
+.commitment-box{background:#070707;border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12);padding:16px 0;margin-bottom:18px}
+.commitment-txt{font-size:13px;color:#777;line-height:1.85}
+.commitment-txt strong{color:#ccc}
+.guar-g{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:20px}
+.guar-c{background:#070707;border:1px solid #0d0d0d;border-radius:9px;padding:14px;transition:all .2s}
+.guar-c:hover{border-color:rgba(212,175,55,.18);transform:translateY(-1px)}
+.guar-t{font-size:12px;font-weight:500;color:#ccc;margin-bottom:4px}
+.guar-d{font-size:11px;color:#555;line-height:1.6}
+/* Closing CTA */
+.cta-btn{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;padding:16px 32px;border-radius:10px;background:linear-gradient(160deg,#e8c84a 0%,#D4AF37 60%,#b8942e 100%);color:#060606;border:none;cursor:pointer;font-family:var(--f);transition:all .22s cubic-bezier(.22,1,.36,1);letter-spacing:.1em;text-transform:uppercase;box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 8px 32px rgba(212,175,55,.22),0 2px 8px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.cta-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.07),transparent 50%);pointer-events:none;border-radius:10px}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 18px 44px rgba(212,175,55,.32),0 4px 12px rgba(0,0,0,.6)}
+.cta-btn:active{transform:translateY(0)}
+.dk-loss-ref{display:none;margin:14px 0 28px;padding:13px 18px;background:rgba(9,8,0,.6);border:1px solid rgba(212,175,55,.12);border-radius:10px;font-size:12px;color:#555;line-height:1.7}
+.dk-loss-ref strong{color:var(--g);font-weight:500}
+.dk-loss-ref.visible{display:block}
+@media(max-width:620px){
+.wrap{padding:0 22px}
+.ps-divider{margin:0 22px}
+.plans-g{grid-template-columns:1fr}
+.tl-g{grid-template-columns:1fr}
+.roi-g{grid-template-columns:repeat(2,1fr)}
+.plan-rec-details{grid-template-columns:repeat(2,1fr)}
+.loss-grid{grid-template-columns:1fr}
+.sim-selectors{grid-template-columns:1fr}
+.hero,.wlc-h1{font-size:clamp(30px,10vw,42px)}
+.sec{font-size:clamp(24px,7vw,30px)}
+.guar-g,.stack-grid{grid-template-columns:1fr}
+.tl-g,.sim-res,.plan-rec-details{grid-template-columns:1fr}
+.inc-grid{grid-template-columns:1fr}
+.wrap,.ph-screen{padding-left:18px;padding-right:18px}
+.res-cta-row{flex-direction:column}
+}
+/* $700 Alignment block */
+.align-wrap{max-width:600px;margin:0 auto;padding:0 24px 56px}
+.align-block{display:flex;align-items:center;gap:28px;background:#070707;border:1px solid rgba(212,175,55,.12);border-radius:16px;padding:28px 28px;position:relative;overflow:hidden}
+.align-block::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.3),transparent)}
+.align-block::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(212,175,55,.04),transparent 60%);pointer-events:none}
+.align-left{text-align:center;flex-shrink:0}
+.align-num{font-size:clamp(46px,11vw,70px);font-weight:300;color:var(--g);font-family:var(--display);letter-spacing:-.035em;line-height:1;filter:drop-shadow(0 0 28px rgba(212,175,55,.16))}
+.align-label{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.35);margin-top:5px}
+.align-sep{width:1px;background:rgba(212,175,55,.08);align-self:stretch;flex-shrink:0}
+.align-txt{font-size:12px;color:#777;line-height:1.85}
+.align-txt strong{color:#999;font-weight:500}
+@media(max-width:480px){
+.align-block{flex-direction:column;text-align:center;gap:16px}
+.align-sep{width:40px;height:1px;align-self:auto}
+}
+/* Before/After Contrast */
+.contrast-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:10px}
+.contrast-col{display:flex;flex-direction:column}
+.contrast-label{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;padding-bottom:16px;margin-bottom:4px;border-bottom:1px solid #0a0a0a}
+.before-label{color:#1e1e1e}
+.after-label{color:rgba(212,175,55,.35)}
+.contrast-item{display:flex;align-items:flex-start;gap:13px;padding:14px 0;border-bottom:1px solid #080808;font-size:14px;line-height:1.7}
+.contrast-item:last-child{border-bottom:none}
+.contrast-before .contrast-item{color:#242424}
+.contrast-after .contrast-item{color:#666}
+.contrast-after .contrast-item:hover{color:#999;transition:color .2s}
+.contrast-ico{flex-shrink:0;margin-top:4px;font-size:8px;width:10px;text-align:center}
+.before-ico{color:#1a1a1a}
+.after-ico{color:var(--g);opacity:.5}
+.contrast-div{width:1px;background:linear-gradient(to bottom,transparent,#141414 15%,#141414 85%,transparent);margin:0 32px}
+@media(max-width:640px){
+.contrast-grid{grid-template-columns:1fr;gap:32px}
+.contrast-div{width:100%;height:1px;background:linear-gradient(to right,transparent,#141414 20%,#141414 80%,transparent);margin:0}
+}
+/* Fases */
+.fases-simple{margin-top:28px;display:flex;flex-direction:column;max-width:500px}
+.fase-row{display:flex;gap:28px;padding:24px 0;border-bottom:1px solid #0a0a0a}
+.fase-row:last-child{border-bottom:none}
+.fase-num{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#1e1e1e;flex-shrink:0;width:44px;padding-top:4px}
+.fase-title{font-size:14px;font-weight:500;color:#bbb;margin-bottom:7px;letter-spacing:-.01em}
+.fase-desc{font-size:14px;color:#555;line-height:1.75}
+/* Closing CTA section */
+.cta-close{text-align:center;padding:60px 0 40px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.cta-close-scarcity{display:inline-flex;align-items:center;gap:9px;font-size:10px;color:#444;background:none;border:1px solid #111;border-radius:20px;padding:6px 16px;white-space:nowrap;max-width:100%;letter-spacing:.06em;text-transform:uppercase}
+.cta-close-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:ctaDot 2s ease infinite}
+@keyframes ctaDot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.3)}50%{opacity:.7;box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+.cta-close-title{font-size:clamp(26px,7vw,42px);font-weight:400;font-family:var(--display);letter-spacing:-.025em;line-height:1.05;color:#fff;max-width:400px}
+.cta-close-sub{font-size:12px;color:#444;line-height:1.85;max-width:340px}
+.cta-close-note{font-size:10px;color:#2a2a2a;letter-spacing:.06em}
+/* Guarantee Shield */
+.guar-shield{position:relative;border-radius:20px;padding:34px 28px;margin:36px 0;overflow:hidden;background:#070707;border:1px solid rgba(212,175,55,.16)}
+.guar-shield::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.05),transparent 65%);pointer-events:none}
+.guar-shield::after{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.4),transparent)}
+.guar-shield-top{display:flex;align-items:center;gap:22px;margin-bottom:26px}
+.guar-emblem-ring{width:66px;height:66px;border-radius:50%;border:1px solid rgba(212,175,55,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;animation:emblemPulse 4s ease infinite}
+@keyframes emblemPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.07)}50%{box-shadow:0 0 0 8px rgba(212,175,55,0)}}
+.guar-emblem-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(212,175,55,.07)}
+.guar-emblem-inner{text-align:center}
+.guar-emblem-ico{font-size:16px;line-height:1;margin-bottom:2px}
+.guar-emblem-days{font-size:22px;font-weight:300;color:var(--g);font-family:var(--display);line-height:1}
+.guar-emblem-dias{font-size:8px;font-weight:600;letter-spacing:.18em;color:rgba(212,175,55,.4);text-transform:uppercase}
+.guar-shield-hdr{}
+.guar-shield-title{font-size:20px;font-weight:400;font-family:var(--display);color:#fff;letter-spacing:-.015em;margin-bottom:4px}
+.guar-shield-sub{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.4)}
+.guar-shield-divider{height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,.1),transparent);margin:20px 0}
+.guar-shield-body{font-size:14px;color:#666;line-height:1.85;margin-bottom:20px}
+.guar-shield-body strong{color:#999;font-weight:500}
+.guar-shield-items{display:flex;flex-direction:column;gap:11px;margin-bottom:4px}
+.guar-si{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:#777;line-height:1.6}
+.guar-si-ico{color:var(--g);font-size:9px;margin-top:3px;flex-shrink:0;opacity:.5}
+.guar-shield-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.guar-sig-name{font-size:14px;font-weight:400;color:#999;font-family:var(--display);letter-spacing:-.01em}
+.guar-sig-role{font-size:9px;color:#444;margin-top:3px;letter-spacing:.06em;text-transform:uppercase}
+.guar-seal{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.35);border:1px solid rgba(212,175,55,.12);border-radius:6px;padding:6px 10px;text-align:center;line-height:1.5}
+/* Silence moments */
+.silence{padding:88px 28px;text-align:center;max-width:520px;margin:0 auto}
+.silence-line{font-size:clamp(30px,9vw,52px);font-weight:400;font-family:var(--display);letter-spacing:-.03em;line-height:1.05;color:#fff;opacity:0;transform:translateY(22px);transition:opacity 1.1s cubic-bezier(.22,1,.36,1),transform 1.1s cubic-bezier(.22,1,.36,1)}
+.silence-line.sin{opacity:1;transform:translateY(0)}
+.silence-line em{color:var(--g);font-style:italic}
+.silence-line span{color:#1e1e1e}
+/* Sistema stages */
+.sist-wrap{max-width:480px;margin:0 auto}
+.sist-stage{opacity:0;transform:perspective(800px) rotateX(10deg) translateY(18px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.sist-stage.sin{opacity:1;transform:perspective(800px) rotateX(0) translateY(0)}
+.sist-card{background:#070707;border:1px solid #111;border-radius:20px;padding:26px 22px;position:relative;overflow:hidden}
+.sist-card::before{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.04),transparent 70%);transition:opacity .8s}
+.sist-stage.sin .sist-card::before{opacity:1}
+.sist-card::after{content:'';position:absolute;top:0;left:0;height:1px;width:0;background:linear-gradient(to right,rgba(212,175,55,.3),rgba(212,175,55,.7),rgba(212,175,55,.3));transition:width 1.2s cubic-bezier(.22,1,.36,1) .25s}
+.sist-stage.sin .sist-card::after{width:100%}
+.sist-tag{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#2a2a2a;margin-bottom:18px;display:flex;align-items:center;gap:9px}
+.sist-tag::after{content:'';flex:1;height:1px;background:#111}
+.sist-h{font-size:22px;font-weight:400;font-family:var(--display);letter-spacing:-.02em;margin-bottom:7px}
+.sist-p{font-size:14px;color:#777;line-height:1.75}
+.sist-p strong{color:#888;font-weight:500}
+.sist-conn{height:56px;display:flex;justify-content:center}
+.sist-conn-t{width:1px;background:#111;position:relative;overflow:hidden}
+.sist-conn-f{position:absolute;top:-40px;left:0;width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--g) 50%,transparent)}
+.sist-conn.sfl .sist-conn-f{animation:sflow 1.1s ease-in-out infinite}
+@keyframes sflow{from{top:-40px}to{top:100%}}
+/* Radar */
+#s-radar{display:block;width:100%;height:120px;margin-top:20px}
+/* WA sim */
+.wa-infra-label{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#1a1a1a;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.wa-infra-label::before,.wa-infra-label::after{content:'';flex:1;height:1px;background:#141414}
+.s-wa{background:#050505;border:1px solid #0d0d0d;border-radius:14px;overflow:hidden}
+.s-wa-hdr{background:#080808;padding:9px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #0d0d0d}
+.s-wa-av{width:27px;height:27px;border-radius:50%;background:linear-gradient(160deg,#e8c84a,#D4AF37 70%,#b8942e);color:#060606;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-wa-nm{font-size:11px;font-weight:600;color:#bbb}
+.s-wa-st{font-size:9px;color:#25d366;display:flex;align-items:center;gap:4px}
+.s-wa-st::before{content:'';width:4px;height:4px;border-radius:50%;background:#25d366;animation:sblink 2s infinite}
+@keyframes sblink{0%,100%{opacity:1}50%{opacity:.35}}
+.s-wa-chat{padding:11px;min-height:200px;display:flex;flex-direction:column;gap:8px;background:#050505}
+.s-bub{max-width:85%;padding:8px 11px 5px;border-radius:12px;opacity:0;transform:translateY(6px) scale(.97);transition:opacity .3s,transform .3s;line-height:1.45;font-size:11px}
+.s-bub.sv{opacity:1;transform:none}
+.s-bub.sin2{background:#0e0e0e;border-radius:12px 12px 12px 3px;align-self:flex-start;color:#999;border:1px solid #161616}
+.s-bub.sout{background:#0a1a0a;border-radius:12px 12px 3px 12px;align-self:flex-end;color:#b8e8b8;border:1px solid rgba(37,211,102,.08)}
+.s-bub-m{display:flex;justify-content:flex-end;gap:4px;margin-top:3px;font-size:9px;color:#222}
+.s-bub.sout .s-bub-m{color:rgba(37,211,102,.25)}
+.s-typ{display:none;align-items:center;gap:3px;padding:7px 10px;background:#0e0e0e;border:1px solid #161616;border-radius:12px 12px 12px 3px;align-self:flex-start;width:fit-content}
+.s-typ.sv{display:flex}
+.s-td{width:4px;height:4px;border-radius:50%;background:#282828;animation:styp .9s infinite}
+.s-td:nth-child(2){animation-delay:.15s}.s-td:nth-child(3){animation-delay:.3s}
+@keyframes styp{0%,60%,100%{transform:translateY(0);background:#282828}30%{transform:translateY(-3px);background:#555}}
+.s-sys-tag{align-self:center;font-size:9px;color:#181818;background:#080808;border:1px solid #0d0d0d;border-radius:8px;padding:3px 10px;letter-spacing:.1em;text-transform:uppercase;opacity:0;transition:opacity .4s}
+.s-sys-tag.sv{opacity:1}
+.s-score{margin:0 11px 11px;opacity:0;transition:opacity .5s .3s}
+.s-score.sv{opacity:1}
+.s-score-lbl{display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px}
+.s-score-txt{color:#333;text-transform:uppercase;letter-spacing:.1em}
+.s-score-val{color:var(--g);font-weight:600}
+.s-score-t{height:1px;background:#0a0a0a;border-radius:2px;overflow:hidden}
+.s-score-f{height:100%;width:0%;background:linear-gradient(to right,#25d366,var(--g));border-radius:2px;transition:width 1.3s cubic-bezier(.22,1,.36,1)}
+/* Appointment */
+.s-appt{margin-top:18px}
+.s-lock{display:flex;justify-content:center;margin-bottom:20px}
+.s-lock-r{width:50px;height:50px;border-radius:50%;border:1px solid rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;animation:slockp 3s ease infinite 2s}
+@keyframes slockp{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.1)}50%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
+.s-lock-ico{font-size:20px;filter:drop-shadow(0 0 5px rgba(34,197,94,.25));opacity:0;transform:scale(0) rotate(-20deg);transition:opacity .5s .5s,transform .5s .5s cubic-bezier(.34,1.56,.64,1)}
+.sist-stage.sin .s-lock-ico{opacity:1;transform:scale(1) rotate(0)}
+.s-status{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:20px;opacity:0;transition:opacity .5s .8s}
+.sist-stage.sin .s-status{opacity:1}
+.s-status-d{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:sblink 1.8s infinite}
+.s-status-t{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#22c55e}
+.s-notif{background:#050505;border:1px solid #0d0d0d;border-radius:12px;padding:14px;display:flex;gap:11px;margin-bottom:18px;opacity:0;transform:translateY(8px);transition:opacity .6s .6s,transform .6s .6s}
+.sist-stage.sin .s-notif{opacity:1;transform:none}
+.s-notif-ico{width:30px;height:30px;border-radius:8px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.s-notif-title{font-size:11px;font-weight:600;color:#ccc;margin-bottom:2px}
+.s-notif-body{font-size:10px;color:#555;line-height:1.55}
+.s-badge{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.12);padding:3px 8px;border-radius:20px}
+.s-badge::before{content:'';width:4px;height:4px;border-radius:50%;background:#4ade80;animation:sblink 1.5s infinite}
+.s-ctrs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;opacity:0;transition:opacity .6s .9s}
+.sist-stage.sin .s-ctrs{opacity:1}
+.s-ctr{text-align:center;padding:12px 6px;background:#050505;border:1px solid #0d0d0d;border-radius:10px}
+.s-ctr-n{font-size:19px;font-weight:300;color:var(--g);font-family:var(--display);letter-spacing:-.01em}
+.s-ctr-l{font-size:9px;color:#444;margin-top:3px;line-height:1.35}
+/* Mirror callout */
+.s-mirror{margin-top:13px;padding:11px 14px;background:#050505;border:1px solid #0d0d0d;border-radius:10px;font-size:11px;color:#333;line-height:1.7;opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s;display:flex;gap:10px;align-items:flex-start}
+.s-mirror.sv{opacity:1;transform:none}
+.s-mirror-ico{font-size:13px;flex-shrink:0;margin-top:1px}
+.s-mirror-txt strong{color:#993333;font-weight:500}
+.s-mirror-txt em{color:#4ade80;font-style:normal;font-weight:500}
+/* Phone lockscreen */
+.s-phone-wrap{display:flex;justify-content:center;margin:22px 0 20px}
+.s-phone{width:min(265px,82vw);background:#050505;border:1.5px solid #161616;border-radius:32px;overflow:hidden;box-shadow:0 28px 72px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.03);position:relative}
+.s-phone::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:54px;height:5px;background:#0a0a0a;border-radius:10px;z-index:10}
+.s-phone-screen{background:#000;min-height:380px;display:flex;flex-direction:column;padding:0 0 16px;position:relative;overflow:hidden;transition:background .4s}
+.s-phone-screen.awake{background:linear-gradient(160deg,#080810 0%,#020203 100%)}
+.s-flash{position:absolute;inset:0;background:rgba(212,175,55,0);pointer-events:none;transition:background .15s;z-index:5;border-radius:30px}
+.s-flash.pop{background:rgba(212,175,55,.12)}
+.s-pstatus{display:flex;justify-content:space-between;padding:14px 18px 4px;font-size:9px;color:#333;transition:color .4s;font-family:var(--f)}
+.s-phone-screen.awake .s-pstatus{color:#666}
+.s-ptime{font-weight:600;font-size:10px}
+.s-picons{font-size:8px}
+.s-plock-info{text-align:center;padding:24px 0 20px;opacity:0;transition:opacity .5s}
+.s-phone-screen.awake .s-plock-info{opacity:1}
+.s-plock-ico{font-size:24px;margin-bottom:8px}
+.s-plock-time{font-size:11px;color:#666;letter-spacing:.02em}
+.s-pnotif{margin:0 12px;background:rgba(12,12,14,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:11px 13px;opacity:0;transform:translateY(-16px) scale(.96);transition:opacity .5s,transform .5s cubic-bezier(.34,1.2,.64,1);overflow:hidden;z-index:10;position:relative}
+.s-pnotif.show{opacity:1;transform:translateY(0) scale(1)}
+.s-pnotif-hdr{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.s-pnotif-app-ico{width:15px;height:15px;border-radius:4px;background:linear-gradient(135deg,#D4AF37,#e8c84a);display:flex;align-items:center;justify-content:center;font-size:9px}
+.s-pnotif-app{font-size:9px;font-weight:600;color:#555;letter-spacing:.08em;text-transform:uppercase;flex:1}
+.s-pnotif-t{font-size:9px;color:#444}
+.s-pnotif-title{font-size:12px;font-weight:600;color:#ddd;margin-bottom:3px}
+.s-pnotif-body{font-size:10px;color:#666;line-height:1.55}
+.s-pnotif-cta{color:var(--g);font-weight:600}
+.s-phome{width:68px;height:3px;background:#0d0d0d;border-radius:4px;margin:14px auto 0}
+.s-phone-screen.awake .s-phome{background:#2a2a2a}
+#swipe-hint{display:block!important}
+/* --- FADE VISIBLE STATE --- */
+.diag-fade.visible{opacity:1;transform:translateY(0)}
+.hidden { 
+  display: none !important; 
+}
+</style>
+<div id="ph-diag">
+  <canvas id="diag-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0;transition:opacity 1s"></canvas>
+  <div class="mouse-light" id="mouse-light"></div>
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-scan"></div>
+  </div>
+  <div class="ui-tag ui-tag-tl">System: Active</div>
+  <div class="ui-tag ui-tag-bl">Florida Real Estate Infrastructure</div>
+  <div class="loss-ticker">
+    <div class="loss-ticker-val" id="loss-ticker-val">$0.00</div>
+    <div class="loss-ticker-lbl">Fuga de capital/seg</div>
+  </div>
+  <!-- WELCOME -->
+<div class="ph-screen" id="sc-welcome" style="position:relative;z-index:1">
+    <div class="wlc-access diag-fade" style="--di:0.5">· Diagnóstico Privado · Florida ·</div>
+    <div class="wlc-h1 diag-fade revealing" id="main-title" style="--di:1">Cada minuto que pasa<br>sin contactar un lead,<br><em>otro realtor lo gana.</em></div>
+    <div class="wlc-divider diag-fade" style="--di:2"></div>
+    <div class="wlc-brief diag-fade" style="--di:2">En 5 preguntas identificamos exactamente<br>dónde está la fuga en tu operación.</div>
+    <div class="wlc-trust diag-fade" style="--di:3">
+      <span class="wlc-trust-item"><span class="wlc-trust-dot">·</span>Meta Ads + CRM</span>
+      <span class="wlc-trust-item"><span class="wlc-trust-dot">·</span>Mercado Florida</span>
+      <span class="wlc-trust-item"><span class="wlc-trust-dot">·</span>Contacto directo</span>
+    </div>
+    <button class="btn-primary btn-breathe diag-fade" style="--di:4" onclick="startDiag()">Iniciar diagnóstico →</button>
+    <button class="btn-ghost diag-fade" style="--di:5" onclick="skipToDeck()">Ya vi la propuesta, ir directo</button>
+  </div>
+  <!-- QUESTIONS -->
+<div class="ph-screen hidden" id="sc-q" style="justify-content:flex-start;padding-top:44px;text-align:left">
+    <div class="q-wrap">
+      <div class="q-prog-bar"><div class="q-prog-fill" id="q-prog"></div></div>
+      <div class="q-step-lbl" id="q-step-lbl"></div>
+      <div class="q-title" id="q-title"></div>
+      <div class="q-sub" id="q-sub"></div>
+      <div class="q-opts" id="q-opts"></div>
+      <button class="q-back" id="q-back-btn" onclick="prevQ()">← Anterior</button>
+    </div>
+  </div>
+  <!-- PROCESSING -->
+<div class="ph-screen hidden" id="sc-proc" style="justify-content:center;align-items:flex-start;padding-left:max(32px,calc(50vw - 220px));padding-right:32px;text-align:left">
+    <div class="proc-label">Sistema activo</div>
+    <div class="proc-title">Analizando<br>tu operación.</div>
+    <div class="proc-steps">
+      <div class="proc-step" id="pstep-0"><div class="proc-dot"></div>Volumen de leads × tasa de contacto</div>
+      <div class="proc-step" id="pstep-1"><div class="proc-dot"></div>Calculando pérdida semanal estimada</div>
+      <div class="proc-step" id="pstep-2"><div class="proc-dot"></div>Modelando potencial recuperable 90 días</div>
+      <div class="proc-step" id="pstep-3"><div class="proc-dot"></div>Construyendo diagnóstico personalizado</div>
+    </div>
+    <div class="proc-bar"><div class="proc-bar-fill" id="proc-bar-fill"></div></div>
+  </div>
+  <!-- RESULTS -->
+<div class="ph-screen hidden" id="sc-res" style="justify-content:flex-start;padding-top:36px;text-align:left">
+    <div class="res-wrap">
+      <div class="res-kicker">Confirmado — así se ve tu fuga de capital</div>
+      <div class="res-h1" id="res-h1"></div>
+      <div class="res-sub" id="res-sub"></div>
+      <div class="res-diag-box">
+        <div class="res-diag-lbl">Tu situación real</div>
+        <div class="res-diag-txt" id="res-diag-txt"></div>
+      </div>
+      <div class="loss-grid">
+        <div class="loss-card"><div class="loss-lbl" id="loss-lbl-1">Fuga de capital/año</div><div class="loss-val red" id="loss-monthly"></div></div>
+        <div class="loss-card"><div class="loss-lbl">Potencial recuperable (3 meses)</div><div class="loss-val gld" id="loss-potential"></div></div>
+        <div class="loss-card"><div class="loss-lbl">Horas/mes que recuperas</div><div class="loss-val wht" id="loss-hours"></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:18px">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#2a2a2a;margin-bottom:5px">De dónde salen estos números</div>
+        <div style="font-size:12px;color:#444;line-height:1.7;padding:8px 0;border-bottom:1px solid #0d0d0d"><span style="color:rgba(212,175,55,.55);font-weight:600" id="loss-note-lbl-1">Fuga de capital:</span> <span id="loss-note-1"></span></div>
+        <div style="font-size:12px;color:#444;line-height:1.7;padding:8px 0;border-bottom:1px solid #0d0d0d"><span style="color:rgba(212,175,55,.55);font-weight:600">Potencial recuperable:</span> <span id="loss-note-2"></span></div>
+        <div style="font-size:12px;color:#555;line-height:1.7;padding:8px 0"><span style="color:rgba(212,175,55,.55);font-weight:600">Horas recuperadas:</span> <span id="loss-note-3"></span></div>
+      </div>
+      <div style="background:#070707;border:1px solid #0d0d0d;border-radius:12px;padding:20px 20px;margin-bottom:18px">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#2a2a2a;margin-bottom:16px">Cómo se recupera ese dinero — el método en 3 pasos</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="min-width:24px;height:24px;border-radius:50%;background:var(--gbg);border:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g);flex-shrink:0">1</div>
+            <div><span style="font-size:13px;font-weight:500;color:#bbb;display:block;margin-bottom:3px">Captación con Meta Ads</span><span style="font-size:12px;color:#555;line-height:1.6">Campañas estructuradas para tu zona en Florida generan leads con intención real de compra — no tráfico genérico.</span></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="min-width:24px;height:24px;border-radius:50%;background:var(--gbg);border:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g);flex-shrink:0">2</div>
+            <div><span style="font-size:13px;font-weight:500;color:#bbb;display:block;margin-bottom:3px">Calificación humana directa</span><span style="font-size:12px;color:#555;line-height:1.6">El lead recibe mensaje en 30 segundos. Si no responde, llamo yo en los minutos siguientes — separo a los listos. Tú solo recibes los primeros.</span></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="min-width:24px;height:24px;border-radius:50%;background:var(--gbg);border:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g);flex-shrink:0">3</div>
+            <div><span style="font-size:13px;font-weight:500;color:#bbb;display:block;margin-bottom:3px">Seguimiento hasta cierre con CRM</span><span style="font-size:12px;color:#555;line-height:1.6">El CRM activa secuencias de WhatsApp y email en paralelo. El lead que no estaba listo hoy sigue en el sistema hasta que madure.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="plan-rec-box">
+        <div class="plan-rec-hdr">
+          <div class="plan-rec-title" id="rec-plan-title"></div>
+          <div class="plan-rec-badge">Recomendado para ti</div>
+        </div>
+        <div class="plan-rec-details">
+          <div class="prd"><div class="prd-lbl">Leads proyectados/mes</div><div class="prd-val" id="rec-leads"></div></div>
+          <div class="prd"><div class="prd-lbl">Primer cierre estimado</div><div class="prd-val" id="rec-cierre"></div></div>
+        </div>
+        <div class="why-rec" id="why-rec"></div>
+        <div style="font-size:11px;color:#666;margin-bottom:18px;line-height:1.6">Tu propuesta completa incluye el desglose de inversión, el simulador de comisión y la garantía de 30 días.</div>
+        <div class="res-cta-row">
+          <button class="btn-primary" onclick="goToDeck()">Ver mi escenario completo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="ph-deck" class="hidden">
+<div class="page-scroll">
+<div class="ps-nav">
+    <div class="wrap">
+      <div class="ps-nav-in">
+        <div class="ps-brand-wrap">
+          <div class="ps-brand-avatar">MR</div>
+          <div class="ps-brand-info">
+            <div class="ps-brand-name">Marcos Rodríguez</div>
+            <div class="ps-brand-role">Sistemas de Conversión &nbsp;·&nbsp; Florida</div>
+          </div>
+        </div>
+        <div class="ps-links">
+          <a href="#sec-dif" class="ps-link">Por qué diferente</a>
+          <a href="#sec-accion" class="ps-link">En acción</a>
+          <a href="#sec-planes" class="ps-link">Planes</a>
+          <a href="#sec-fases" class="ps-link">Fases</a>
+          <a href="#sec-florida" class="ps-link">Florida</a>
+          <a href="#sec-roi" class="ps-link">Retorno</a>
+          <a href="#sec-faq" class="ps-link">FAQ</a>
+        </div>
+        <a href="https://wa.me/584244591626?text=Hola%2C+vi+tu+propuesta+y+quiero+revisar+mi+caso" target="_blank" class="ps-nav-cta">Revisar mi caso</a>
+      </div>
+    </div>
+  </div>
+<div class="ps-section" id="sec-dif">
+    <div class="wrap">
+      <div class="hero" id="dk-hero"></div>
+      <div class="hero-sub" id="dk-hero-sub"></div>
+      <div class="dk-loss-ref" id="dk-loss-ref"></div>
+      <div class="dif-section">
+        <div class="dif-col dif-col-do">
+          <div class="dif-item">
+            <div class="dif-num">01</div>
+            <div class="dif-content">
+              <div class="dif-title">Llamo yo. No un bot, no un asistente.</div>
+              <div class="dif-desc">Cada lead que entra recibe un mensaje en 30 segundos y una llamada mía en minutos. El primer contacto humano define si la conversación avanza.</div>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-num">02</div>
+            <div class="dif-content">
+              <div class="dif-title">Filtro antes de pasarte el lead.</div>
+              <div class="dif-desc">Solo te transfiero a quien ya tiene intención real, capacidad financiera y disposición a hablar contigo. Tu tiempo va a cierres, no a calificaciones.</div>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-num">03</div>
+            <div class="dif-content">
+              <div class="dif-title">Opero el sistema completo por ti.</div>
+              <div class="dif-desc">Meta Ads, CRM, secuencias de seguimiento, reportes. No te paso un panel a aprender — yo ejecuto, tú supervisas y cierras.</div>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-num">04</div>
+            <div class="dif-content">
+              <div class="dif-title">Seguimiento hasta el final.</div>
+              <div class="dif-desc">El lead que hoy no está listo no desaparece. Sigue recibiendo contacto por WhatsApp y email hasta que responde o se descarta — sin que toques nada.</div>
+            </div>
+          </div>
+          <div class="dif-item">
+            <div class="dif-num">05</div>
+            <div class="dif-content">
+              <div class="dif-title">Un día al mes de grabación. Yo hago el resto.</div>
+              <div class="dif-desc">Te entrego el guión, la estructura y exactamente qué decir. Tú grabas en un día. Yo edito, formato y publico. Presencia constante en redes sin que te quite tiempo de cerrar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-contraste">
+    <div class="wrap">
+      <div class="contrast-grid">
+        <div class="contrast-col contrast-before">
+          <div class="contrast-label before-label">Sin el sistema</div>
+          <div class="contrast-item">
+            <div class="contrast-ico before-ico">◌</div>
+            <div>Ves la notificación del lead 40 minutos tarde. Ya habló con otro realtor.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico before-ico">◌</div>
+            <div>Llamas 8 veces. Nadie contesta. El lead desaparece de tu lista.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico before-ico">◌</div>
+            <div>Tu Excel tiene 60 nombres. No sabes cuáles están listos y cuáles son fantasmas.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico before-ico">◌</div>
+            <div>Terminas el domingo editando videos porque en la semana no hubo tiempo.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico before-ico">◌</div>
+            <div>Sabes que estás dejando dinero sobre la mesa. Solo que no sabes cuánto.</div>
+          </div>
+        </div>
+        <div class="contrast-div"></div>
+        <div class="contrast-col contrast-after">
+          <div class="contrast-label after-label">Con el sistema</div>
+          <div class="contrast-item">
+            <div class="contrast-ico after-ico">●</div>
+            <div>El lead recibe un mensaje en 30 segundos. Tú ni te enteraste todavía.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico after-ico">●</div>
+            <div>El sistema activa 16 puntos de contacto en 7 días — WA, email y llamadas. Sin que toques nada.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico after-ico">●</div>
+            <div>Solo ves leads que ya pasaron el filtro. Tu tiempo va a presentaciones y cierres.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico after-ico">●</div>
+            <div>Grabas un día al mes. Yo escribo el guión, edito y publico. Presencia constante.</div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-ico after-ico">●</div>
+            <div>Cada 15 días recibes un reporte. Sabes exactamente cuánto está generando el sistema.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="silence" id="sl1">
+    <div class="silence-line">Cada minuto que pasa<br>sin contactar un lead,<br><em>otro realtor lo está llamando.</em></div>
+  </div>
+<div class="ps-section" id="sec-accion">
+    <div class="wrap">
+      <div class="sec">Míralo trabajar.</div>
+      <div class="sist-wrap">
+        <!-- STAGE 1: RADAR -->
+        <div class="sist-stage" id="ss1">
+          <div class="sist-card">
+            <div class="sist-tag">Momento 1</div>
+            <div class="sist-h">El lead entra.</div>
+            <div class="sist-p">El sistema lo detecta antes de que veas la notificación. <strong>Responde en 30 segundos.</strong></div>
+            <canvas id="s-radar"></canvas>
+          </div>
+        </div>
+
+        <div class="sist-conn" id="sc1"><div class="sist-conn-t"><div class="sist-conn-f"></div></div></div>
+
+        <!-- STAGE 2: WHATSAPP -->
+        <div class="sist-stage" id="ss2">
+          <div class="sist-card">
+            <div class="sist-tag">Momento 2</div>
+            <div class="sist-h">El sistema trabaja.</div>
+            <div class="sist-p">Contacto, calificación, seguimiento. <strong>Sin que muevas un dedo.</strong></div>
+            <div class="wa-infra-label">Escenario de conversión estándar — Florida</div>
+            <div class="s-wa">
+              <div class="s-wa-hdr">
+                <div class="s-wa-av">MR</div>
+                <div><div class="s-wa-nm">Marcos Rodríguez</div><div class="s-wa-st">activo ahora</div></div>
+              </div>
+              <div class="s-wa-chat" id="s-chat"></div>
+              <div class="s-score" id="s-score">
+                <div class="s-score-lbl"><span class="s-score-txt">Lead Score</span><span class="s-score-val" id="s-sv">0%</span></div>
+                <div class="s-score-t"><div class="s-score-f" id="s-sf"></div></div>
+              </div>
+            </div>
+            <div class="s-mirror" id="s-mirror"></div>
+          </div>
+        </div>
+
+        <div class="sist-conn" id="sc2" style="--g:#22c55e"><div class="sist-conn-t" style="background:rgba(34,197,94,.06)"><div class="sist-conn-f" style="background:linear-gradient(to bottom,transparent,#22c55e 50%,transparent)"></div></div></div>
+
+        <!-- STAGE 3: IPHONE LOCKSCREEN -->
+        <div class="sist-stage" id="ss3">
+          <div class="sist-card">
+            <div class="sist-tag">Momento 3</div>
+            <div class="sist-h">Tú recibes esto.</div>
+            <div class="sist-p">Mientras cierras otra cita. Mientras manejas. <strong>Sin haber tocado un solo lead.</strong></div>
+            <div class="s-phone-wrap">
+              <div class="s-phone" id="s-phone">
+                <div class="s-phone-screen" id="s-phone-screen">
+                  <div class="s-flash" id="s-flash"></div>
+                  <div class="s-pstatus">
+                    <span class="s-ptime" id="s-ptime">9:41</span>
+                    <div class="s-picons">&#9679;&#9679;&#9679; WiFi</div>
+                  </div>
+                  <div class="s-plock-info" id="s-plock-info">
+                    <div class="s-plock-ico">🔒</div>
+                    <div class="s-plock-time" id="s-plock-time"></div>
+                  </div>
+                  <div class="s-pnotif" id="s-pnotif">
+                    <div class="s-pnotif-hdr">
+                      <div class="s-pnotif-app-ico">⚡</div>
+                      <div class="s-pnotif-app">GoHighLevel</div>
+                      <div class="s-pnotif-t">ahora</div>
+                    </div>
+                    <div class="s-pnotif-title">🎉 ¡Nueva cita confirmada!</div>
+                    <div class="s-pnotif-body">Carlos Mendoza &middot; $450K &middot; Pre-aprobado &middot; Miami</div>
+                    <div class="s-pnotif-cta" style="font-size: 10px; margin-top: 4px;">Ver perfil completo →</div>
+                  </div>
+                  <div class="s-phome"></div>
+                </div>
+              </div>
+            </div>
+            <div class="s-ctrs" id="s-ctrs">
+              <div class="s-ctr"><div class="s-ctr-n" data-st="30" data-ss="s">0s</div><div class="s-ctr-l">Primer contacto</div></div>
+              <div class="s-ctr"><div class="s-ctr-n" data-st="100" data-ss="%">0%</div><div class="s-ctr-l">Leads gestionados</div></div>
+              <div class="s-ctr"><div class="s-ctr-n" data-st="0">0</div><div class="s-ctr-l">Leads fríos al Realtor</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+<div class="silence" id="sl2">
+    <div class="silence-line"><em>Un cierre en Florida.</em><br><span>La inversión se paga sola.</span></div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-roi">
+    <div class="wrap">
+      <div class="sec">Los números en 3 meses</div>
+      <div class="mkt-badge" id="mkt-badge-roi">&#127968; Mercado de Florida</div>
+      <div class="psel" id="roi-sel"></div>
+      <div class="roi-g" id="roi-g"></div>
+      <div class="sim-box">
+        <div class="sim-hdr"><div class="sim-ttl">Simulador de comisión</div><span class="sim-badge">Interactivo</span></div>
+        <div class="sim-sub">Ajusta según tu mercado y tu comisión habitual:</div>
+        <div class="sim-selectors">
+          <div class="sim-sel-group">
+            <div class="sim-sel-lbl">Precio promedio de propiedad</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:11px;color:#555">$150K</span>
+              <span style="font-size:16px;font-weight:300;color:var(--g);font-family:var(--display);letter-spacing:-.02em" id="price-display">$400K</span>
+              <span style="font-size:11px;color:#555">$1.2M</span>
+            </div>
+            <input type="range" id="price-slider" min="150000" max="1200000" step="25000" value="400000"
+              style="width:100%;-webkit-appearance:none;appearance:none;height:1px;background:linear-gradient(to right,var(--g) 0%,var(--g) 20%,#1a1a1a 20%,#1a1a1a 100%);border-radius:2px;outline:none;cursor:pointer"
+              oninput="onPriceSlide(this.value)">
+          </div>
+          <div class="sim-sel-group">
+            <div class="sim-sel-lbl">Tu comisión</div>
+            <div class="sim-btns" id="comm-sel"></div>
+          </div>
+        </div>
+        <div class="sim-res">
+          <div class="sim-card"><div class="sim-lbl">Comisión por cierre</div><div class="sim-num pos" id="sim-comm"></div></div>
+          <div class="sim-card"><div class="sim-lbl">Inversión 3 meses</div><div class="sim-num" id="sim-inv"></div></div>
+          <div class="sim-card"><div class="sim-lbl" id="sim-net-lbl">Ganancia neta (1 cierre)</div><div class="sim-num" id="sim-net"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="align-wrap">
+    <div class="align-block">
+      <div class="align-left">
+        <div class="align-num">$700</div>
+        <div class="align-label">por cierre confirmado</div>
+      </div>
+      <div class="align-sep"></div>
+      <div class="align-right">
+        <div class="align-txt">Solo cobro este fee cuando el sistema produce un cierre real. <strong>Si no cierras, no lo cobro.</strong> Ese es el alineamiento.</div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-planes">
+    <div class="wrap">
+      <div class="sec">Elige el nivel de inversión</div>
+      <div class="mkt-badge" id="mkt-badge-plans">&#127968; Mercado de Florida</div>
+      <div class="plans-g" id="plans-grid"></div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-florida">
+    <div class="wrap">
+      <div class="sec">Por qué Florida<br>tiene sus propias reglas</div>
+      <div class="fl-hero-stat">
+        <div class="fl-hero-num">+24h</div>
+        <div class="fl-hero-right">
+          <div class="fl-hero-lbl">Tiempo promedio que tarda un realtor en responder un lead en Florida.</div>
+          <div class="fl-hero-sub">El comprador evalúa varias opciones al mismo tiempo. El sistema responde en 30 segundos — antes de que otro realtor vea la notificación.</div>
+        </div>
+      </div>
+      <div class="fl-sub-grid">
+        <div class="fl-sub-stat">
+          <div class="fl-sub-num">22%</div>
+          <div class="fl-sub-lbl">Compradores hispanos o latinoamericanos</div>
+          <div class="fl-sub-desc">El sistema opera en español desde el primer mensaje hasta la calificación.</div>
+        </div>
+        <div class="fl-sub-stat">
+          <div class="fl-sub-num">Nov–Abr</div>
+          <div class="fl-sub-lbl">Temporada alta de compra</div>
+          <div class="fl-sub-desc">El pipeline que construyes hoy estará maduro cuando llegue la demanda.</div>
+        </div>
+        <div class="fl-sub-stat">
+          <div class="fl-sub-num">45–60d</div>
+          <div class="fl-sub-lbl">Ciclo promedio de cierre</div>
+          <div class="fl-sub-desc">El sistema mantiene el contacto activo durante todo ese tiempo sin intervención tuya.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-faq">
+    <div class="wrap">
+      <div class="sec">Lo que probablemente<br>estás pensando</div>
+      <div class="faq-wrap">
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuántas horas me ahorra este sistema?<span class="faq-arr">&#9660;</span></div><div class="faq-body"><div class="faq-inner">Depende de tu volumen, pero el cálculo es simple: el sistema activa <strong>16 puntos de contacto por lead en 7 días</strong> — llamadas, WhatsApp y email en horarios distintos. Con 20 leads al mes, eso son fácilmente <strong>más de 20 horas de gestión manual</strong> que el sistema reemplaza. Tú usas ese tiempo en presentaciones y negociaciones.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Con cuántos realtors trabajas?<span class="faq-arr">&#9660;</span></div><div class="faq-body"><div class="faq-inner">Estoy seleccionando mis primeras 2 cuentas de forma deliberada. <strong>No quiero 10 clientes mediocres — quiero 2 resultados que no tenga que explicar.</strong> Por eso el precio de entrada es el que es, y la atención es completamente directa: yo ejecuto, yo reporto, yo respondo. Sin equipo intermedio, sin ejecutivos de cuenta. El día que eso cambie, el precio cambia también.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿El presupuesto de Meta Ads lo manejas tú?<span class="faq-arr">&#9660;</span></div><div class="faq-body"><div class="faq-inner">No. El presupuesto de Meta Ads se carga directamente a tu tarjeta desde tu propia cuenta de Business Manager. <strong>Yo gestiono las campañas pero nunca toco el dinero de pauta</strong> — tú tienes control total en todo momento. Lo que yo cobro es el fee mensual de gestión, que es independiente del presupuesto de anuncios.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el modelo de comisión?<span class="faq-arr">&#9660;</span></div><div class="faq-body"><div class="faq-inner">El fee mensual cubre la operación completa del sistema. Adicionalmente, cobro <strong>$700 por cada cierre que genere el sistema</strong> — no por cualquier cierre tuyo, solo por los que vengan directamente del pipeline que opera conmigo. Eso alinea mis incentivos con los tuyos: <strong>si el sistema no cierra, yo no cobro esa parte.</strong> Nuestros intereses son exactamente los mismos desde el primer día.</div></div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa después de agendar una llamada?<span class="faq-arr">&#9660;</span></div><div class="faq-body"><div class="faq-inner">En 20–30 minutos revisamos tu zona, tu volumen actual y si el sistema tiene sentido para tu operación. Si encajamos, definimos el plan y los primeros pasos. Si no encajamos, te lo digo directo. <strong>Sin rodeos.</strong></div></div></div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-fases">
+    <div class="wrap">
+      <div class="sec">Cómo evoluciona el sistema</div>
+      <div class="fases-simple">
+        <div class="fase-row">
+          <div class="fase-num">Mes 1</div>
+          <div class="fase-info">
+            <div class="fase-title">Aprendizaje</div>
+            <div class="fase-desc">Setup completo. Campañas activas. Pipeline arrancando. El algoritmo aprende tu mercado y tu zona.</div>
+          </div>
+        </div>
+        <div class="fase-row">
+          <div class="fase-num">Mes 2</div>
+          <div class="fase-info">
+            <div class="fase-title">Optimización</div>
+            <div class="fase-desc">Los leads del mes 1 maduran en el pipeline. Conversaciones activas. Primeras citas en proceso. El sistema se afina con datos reales.</div>
+          </div>
+        </div>
+        <div class="fase-row">
+          <div class="fase-num">Mes 3</div>
+          <div class="fase-info">
+            <div class="fase-title">Cosecha</div>
+            <div class="fase-desc">El pipeline acumulado trabaja solo. El sistema opera con todo el volumen de 3 meses — los primeros cierres aparecen aquí.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="ps-divider"></div>
+<div class="silence" id="sl3">
+    <div class="silence-line">No hay nada más que entender.<br><em>Solo una decisión.</em></div>
+  </div>
+<div class="ps-divider"></div>
+<div class="ps-section" id="sec-cierre">
+    <div class="wrap">
+      <div class="sec">Lo que pasa en los<br>primeros 30 días.</div>
+      <div class="process-30">
+        <div class="p30-row"><div class="p30-day">Día 1–5</div><div class="p30-txt"><strong>Setup completo.</strong> CRM, pixel, audiencias y primer creativo listo.</div></div>
+        <div class="p30-row"><div class="p30-day">Día 6–10</div><div class="p30-txt"><strong>Lanzamiento.</strong> Campañas activas. Primeros leads entrando.</div></div>
+        <div class="p30-row"><div class="p30-day">Día 15</div><div class="p30-txt"><strong>Primer reporte.</strong> Leads generados, contactados, conversaciones activas y CPL real.</div></div>
+        <div class="p30-row"><div class="p30-day">Sem. 3–4</div><div class="p30-txt"><strong>Optimización.</strong> Ajuste de creativos y audiencias con datos reales.</div></div>
+      </div>
+      <div class="guar-shield" id="guar-shield">
+        <div class="guar-shield-top">
+          <div>
+            <div class="guar-emblem-ring">
+              <div class="guar-emblem-inner">
+                <div class="guar-emblem-ico">🛡</div>
+                <div class="guar-emblem-days">30</div>
+                <div class="guar-emblem-dias">DÍAS</div>
+              </div>
+            </div>
+          </div>
+          <div class="guar-shield-hdr">
+            <div class="guar-shield-title">Garantía de Resultados</div>
+            <div class="guar-shield-sub">Operación Protegida — Por Contrato</div>
+          </div>
+        </div>
+        <div class="guar-shield-divider"></div>
+        <div class="guar-shield-body">
+          <p>Si en los primeros <strong>30 días</strong> el sistema no genera un mínimo de <strong>3 citas calificadas</strong> — leads que respondieron, pasaron el filtro de calificación y agendaron una reunión contigo — <strong>opero el mes siguiente completamente gratis, sin cobrar fee de gestión, hasta alcanzar esa métrica.</strong> Sin cláusulas de escape. O funciona, o sigo trabajando sin cobrar.</p>
+        </div>
+        <div style="font-size:11px;color:#444;line-height:1.7;padding:10px 0 4px;border-top:1px solid #0d0d0d;margin-top:2px">
+          <span style="color:#666;font-weight:500">Cita calificada:</span> lead que respondió, conversación de calificación completada (intención de compra, capacidad financiera básica, timeline definido) y reunión con el realtor confirmada o completada.
+        </div>
+        <div class="guar-shield-items">
+          <div class="guar-si"><span class="guar-si-ico">✦</span><span>Ads Manager y CRM abiertos para ti en todo momento</span></div>
+          <div class="guar-si"><span class="guar-si-ico">✦</span><span>Reporte cada 15 días — leads, contactados, pre-aprobados</span></div>
+          <div class="guar-si"><span class="guar-si-ico">✦</span><span>Métricas comprometidas por escrito en el contrato</span></div>
+          <div class="guar-si"><span class="guar-si-ico">✦</span><span>$700 por cierre — solo gano cuando tú ganas</span></div>
+        </div>
+        <div class="guar-shield-divider"></div>
+        <div class="guar-shield-footer">
+          <div class="guar-sig">
+            <div class="guar-sig-name">Marcos Rodríguez</div>
+            <div class="guar-sig-role">Operador del Sistema &nbsp;·&nbsp; Florida</div>
+          </div>
+        </div>
+      </div>
+      <div class="cta-close">
+        <div class="cta-close-scarcity">
+          <div class="cta-close-dot"></div>
+          <span>Trabajo con un máximo de 3 realtors al mismo tiempo &nbsp;·&nbsp; Actualmente tengo 1 espacio abierto</span>
+        </div>
+        <div class="cta-close-title">Cada semana sin el sistema<br>es una semana de leads perdidos.</div>
+        <div class="cta-close-sub">La llamada dura 20–30 minutos. Sin compromiso. Si no encajamos, te lo digo directo.</div>
+        <button class="cta-btn" onclick="window.open('https://wa.me/584244591626?text=Hola%2C+vi+tu+propuesta+y+quiero+revisar+mi+caso','_blank')">
+          Reservar mi espacio →
+        </button>
+        <div class="cta-close-note">Después de agendar, recibes confirmación de la hora del Zoom en menos de 2 horas.</div>
+      </div>
+
+      <div style="padding:28px 0 32px;text-align:center;border-top:1px solid #0a0a0a;margin-top:8px">
+        <span style="font-size:11px;color:#333">Marcos Rodríguez — Florida</span>
+        <span style="color:#222;font-size:11px;margin:0 8px">&middot;</span>
+        <a href="https://wa.me/584244591626" target="_blank" style="font-size:11px;color:#333;text-decoration:none;transition:color .18s" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='#333'">WhatsApp</a>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+const D={leads:'mid',leadsNum:20,price:400000,problem:'no-follow',crm:'excel',closes:1,crmCR:0.32};
+let recPlan='estandar',tlP=1,roiP=1,selPrice=1,selComm=1;
+
+const PRICES=[250000,300000,400000,600000,850000];
+const PLABELS=['$200K\u2013$300K','$300K','$400K','$600K','$700K+'];
+const COMMS=[0.025,0.03,0.04,0.05];
+const CLABELS=['2.5%','3%','4%','5%'];
+
+const MKT={
+  250000:{seg:'mercado entry-level de Florida',copy:'En el segmento de entrada de Florida, la velocidad de contacto es la diferencia entre cerrar t\u00fa o perder el lead a otro realtor en minutos.'},
+  300000:{seg:'mercado entry-level de Florida',copy:'En el segmento de entrada de Florida, la velocidad de contacto es la diferencia entre cerrar t\u00fa o perder el lead a otro realtor en minutos.'},
+  400000:{seg:'mercado medio de Florida',copy:'El mercado medio de Florida concentra el mayor volumen de compradores hispanos: familias de primera vivienda, inversionistas latinos y compradores de otros estados con ra\u00edces en Latinoam\u00e9rica. El seguimiento sistem\u00e1tico en espa\u00f1ol captura ese perfil mejor que cualquier campa\u00f1a gen\u00e9rica.'},
+  600000:{seg:'mercado medio-alto de Florida',copy:'En el segmento medio-alto de Florida los compradores toman m\u00e1s tiempo en decidir \u2014 pero cuando deciden, ya est\u00e1n convencidos. El sistema mantiene ese contacto activo durante todo el ciclo.'},
+  850000:{seg:'mercado de lujo de Florida',copy:'El comprador de lujo en Florida frecuentemente viene del exterior y necesita varios puntos de contacto antes de actuar. La calificaci\u00f3n humana oportuna es lo que convierte ese inter\u00e9s en una cita real.'}
+};
+
+function getMkt(){return MKT[D.price]||MKT[400000];}
+
+const PLANS=[
+  {id:'arranque',lbl:'Pipeline',ads:600,total:1600,inv:'$4,800',invNum:4800,leadsRange:'~35\u201360',cierre:'mes 3',months:[
+    {p:'Aprendizaje',focus:'Setup completo. Campa\u00f1as activas. Pipeline arrancando.',cont:'~12\u201320',pc:'~3\u20136',docs:'~1\u20133',pa:'~1\u20132',con:'\u2014',ci:'\u2014'},
+    {p:'Optimizaci\u00f3n',focus:'Leads del mes 1 en seguimiento activo. Primeras conversaciones s\u00f3lidas.',cont:'~14\u201324',pc:'~4\u20137',docs:'~2\u20133',pa:'~1\u20132',con:'~0\u20131',ci:'\u2014'},
+    {p:'Cosecha',focus:'El pipeline acumulado trabaja solo. Primeros cierres.',cont:'~16\u201328',pc:'~5\u20138',docs:'~2\u20134',pa:'~2\u20133',con:'~1\u20132',ci:'~1'}
+  ],roi:{leads:'~105\u2013180',pa:'~4\u20137',con:'~2\u20134',ci:'~2\u20133'}},
+  {id:'estandar',lbl:'Growth',ads:900,total:1900,inv:'$5,700',invNum:5700,leadsRange:'~50\u201390',cierre:'mes 2\u20133',months:[
+    {p:'Aprendizaje',focus:'Setup completo. El algoritmo aprende r\u00e1pido. Pipeline llen\u00e1ndose.',cont:'~18\u201328',pc:'~5\u20138',docs:'~2\u20133',pa:'~1\u20132',con:'\u2014',ci:'\u2014'},
+    {p:'Optimizaci\u00f3n',focus:'Leads del mes 1 en seguimiento activo. Conversaciones serias. Posibles cierres tempranos.',cont:'~22\u201336',pc:'~6\u201310',docs:'~3\u20135',pa:'~2\u20133',con:'~1\u20132',ci:'~0\u20131'},
+    {p:'Cosecha',focus:'El sistema cosecha lo sembrado. Cierres consistentes.',cont:'~28\u201344',pc:'~7\u201312',docs:'~4\u20136',pa:'~3\u20134',con:'~2\u20133',ci:'~1\u20132'}
+  ],roi:{leads:'~150\u2013270',pa:'~6\u201311',con:'~4\u20137',ci:'~2\u20134'}},
+  {id:'acelerado',lbl:'Dominance',ads:1200,total:2200,inv:'$6,600',invNum:6600,leadsRange:'~65\u2013120',cierre:'mes 2\u20133',months:[
+    {p:'Aprendizaje',focus:'Setup completo. Alto volumen desde la semana 1. El sistema corre a m\u00e1xima velocidad.',cont:'~24\u201338',pc:'~6\u201310',docs:'~3\u20134',pa:'~2\u20133',con:'~1\u20132',ci:'\u2014'},
+    {p:'Optimizaci\u00f3n',focus:'Leads del mes 1 madurando. Primeros cierres reales con los m\u00e1s avanzados.',cont:'~30\u201348',pc:'~8\u201312',docs:'~4\u20136',pa:'~3\u20134',con:'~2\u20133',ci:'~1\u20132'},
+    {p:'Cosecha',focus:'M\u00e1ximo flujo de cierres. El volumen acumulado trabaja para ti.',cont:'~36\u201358',pc:'~9\u201314',docs:'~5\u20137',pa:'~4\u20135',con:'~3\u20134',ci:'~2\u20133'}
+  ],roi:{leads:'~195\u2013360',pa:'~9\u201315',con:'~6\u201310',ci:'~3\u20135'}}
+];
+
+const QS=[
+  {id:'leads',q:'\u00bfCu\u00e1ntos prospectos est\u00e1s intentando gestionar t\u00fa solo hoy?',sub:'Referidos, tr\u00e1fico propio, cualquier canal \u2014 s\u00e9 exacto',opts:[
+    {label:'Menos de 10',sub:'Flujo muy limitado',ico:'&#128200;',val:'low',num:7},
+    {label:'Entre 10 y 30',sub:'Flujo moderado',ico:'&#128201;',val:'mid',num:20},
+    {label:'Entre 30 y 50',sub:'Buen volumen',ico:'&#128202;',val:'high',num:40},
+    {label:'M\u00e1s de 50',sub:'Alto volumen',ico:'&#128640;',val:'vhigh',num:65}
+  ]},
+  {id:'price',q:'\u00bfCu\u00e1l es el precio promedio de las propiedades que vendes?',sub:'El rango que m\u00e1s se repite en tu operaci\u00f3n en Florida',opts:[
+    {label:'$200K \u2013 $300K',sub:'Entry-level / primera vivienda',ico:'&#127968;',val:250000},
+    {label:'$300K \u2013 $500K',sub:'Mercado medio',ico:'&#127969;',val:400000},
+    {label:'$500K \u2013 $700K',sub:'Premium / segunda vivienda',ico:'&#127970;',val:600000},
+    {label:'$700K+',sub:'Lujo / mercado costero',ico:'&#127981;',val:850000}
+  ]},
+  {id:'problem',q:'\u00bfCu\u00e1l es tu mayor obst\u00e1culo ahora mismo?',sub:'El que m\u00e1s te est\u00e1 costando dinero este mes',opts:[
+    {label:'No genero suficientes leads',sub:'Dependo de referidos o el pipeline est\u00e1 vac\u00edo',ico:'&#128202;',val:'no-leads'},
+    {label:'Los leads llegan pero nadie los sigue',sub:'Se enfrían y los pierde la competencia',ico:'&#128123;',val:'no-follow'},
+    {label:'No logro convertir a cierres',sub:'Los leads no maduran o no avanzan',ico:'&#128274;',val:'no-close'},
+    {label:'Los tres al mismo tiempo',sub:'Necesito un sistema completo desde cero',ico:'&#128680;',val:'all'}
+  ]},
+  {id:'crm',q:'\u00bfTienes alg\u00fan sistema de seguimiento activo?',sub:'Esto calibra el diagn\u00f3stico a tu situaci\u00f3n real',opts:[
+    {label:'No uso nada',sub:'Todo en la cabeza o en papeles',ico:'&#128203;',val:'none',cr:0.20},
+    {label:'Excel o WhatsApp manual',sub:'Seguimiento inconsistente',ico:'&#128241;',val:'excel',cr:0.32},
+    {label:'Tengo CRM pero casi no lo uso',sub:'La herramienta existe, el proceso no',ico:'&#128187;',val:'unused',cr:0.42},
+    {label:'Sistema funcionando bien',sub:'CRM activo y flujo definido',ico:'&#9881;',val:'full',cr:0.52}
+  ]},
+  {id:'closes',q:'S\u00e9 honesto: \u00bfcu\u00e1ntos de esos leads realmente conviertes en firma?',sub:'Tu promedio real \u2014 no el mejor mes del a\u00f1o',opts:[
+    {label:'0 cierres',sub:'No estoy cerrando actualmente',ico:'&#128532;',val:0},
+    {label:'1 cierre',sub:'Cierre ocasional',ico:'&#128077;',val:1},
+    {label:'2 a 3 cierres',sub:'Ritmo constante',ico:'&#127775;',val:2.5},
+    {label:'4 o m\u00e1s',sub:'Alto rendimiento',ico:'&#128293;',val:4}
+  ]}
+];
+
+const answers={};let qStep=0;
+
+function startDiag(){show('sc-q');renderQ(0);}
+function skipToDeck(){
+  calcAll();
+  document.getElementById('ph-diag').classList.add('hidden');
+  document.querySelectorAll('.ui-tag,.loss-ticker').forEach(el=>el.style.display='none');
+  const deck=document.getElementById('ph-deck');
+  deck.classList.remove('hidden');
+  deck.classList.add('revealing');
+  setTimeout(()=>deck.classList.remove('revealing'),700);
+  window.scrollTo({top:0,behavior:'instant'});
+  buildDeck();
+}
+function show(id){
+  ['sc-welcome','sc-q','sc-proc','sc-res'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById('ph-diag').classList.remove('hidden');
+  document.getElementById('ph-deck').classList.add('hidden');
+  if(document.getElementById(id))document.getElementById(id).classList.remove('hidden');
+  // Hide corner decorations when not on welcome
+  const isWelcome = (id === 'sc-welcome');
+  document.querySelectorAll('.ui-tag,.loss-ticker').forEach(el=>el.style.display=isWelcome?'':'none');
+}
+function renderQ(step){
+  qStep=step;const q=QS[step];
+  document.getElementById('q-prog').style.width=Math.round((step/QS.length)*100)+'%';
+  document.getElementById('q-step-lbl').textContent='Pregunta '+(step+1)+' de '+QS.length;
+  document.getElementById('q-title').textContent=q.q;
+  document.getElementById('q-sub').textContent=q.sub;
+  document.getElementById('q-back-btn').style.visibility=step===0?'hidden':'visible';
+  document.getElementById('q-opts').innerHTML=q.opts.map((o,i)=>`
+    <div class="q-opt${answers[q.id]===i?' selected':''}" onclick="selectOpt(${i})">
+      <div class="q-opt-ico">${o.ico}</div>
+      <div><span class="q-opt-label">${o.label}</span>${o.sub?'<span class="q-opt-sub">'+o.sub+'</span>':''}</div>
+    </div>`).join('');
+  const w=document.querySelector('.q-wrap');
+  if(w){w.classList.remove('q-entering');void w.offsetWidth;w.classList.add('q-entering');}
+}
+function selectOpt(i){
+  const q=QS[qStep],o=q.opts[i];
+  answers[q.id]=i;
+  if(q.id==='leads'){D.leads=o.val;D.leadsNum=o.num;}
+  if(q.id==='price'){D.price=o.val;}
+  if(q.id==='problem'){D.problem=o.val;}
+  if(q.id==='crm'){D.crm=o.val;D.crmCR=o.cr;}
+  if(q.id==='closes'){D.closes=o.val;}
+  document.querySelectorAll('.q-opt')[i].classList.add('selected');
+  setTimeout(()=>{qStep<QS.length-1?renderQ(qStep+1):showProcessing();},340);
+}
+function prevQ(){if(qStep>0)renderQ(qStep-1);}
+
+function animateProcessingSteps(totalDuration){
+  const ids=['pstep-0','pstep-1','pstep-2','pstep-3'];
+  const bar=document.getElementById('proc-bar-fill');
+  const stepDelay=totalDuration/ids.length;
+  ids.forEach((id,i)=>{
+    setTimeout(()=>{
+      ids.forEach((x,j)=>{
+        const el=document.getElementById(x);
+        if(!el)return;
+        if(j<i)el.className='proc-step done';
+        else if(j===i)el.className='proc-step active';
+        else el.className='proc-step';
+      });
+      if(bar)bar.style.width=((i+1)/ids.length*100)+'%';
+    },i*stepDelay);
+  });
+}
+
+function showProcessing(){
+  show('sc-proc');
+  // Reset steps
+  ['pstep-0','pstep-1','pstep-2','pstep-3'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.className='proc-step';
+  });
+  const pbar=document.getElementById('proc-bar-fill');
+  if(pbar)pbar.style.width='0%';
+  animateProcessingSteps(1900);
+  setTimeout(()=>{calcDiagnosis();showResults();},2200);
+}
+
+const HERO={
+  'no-leads':{h:'Cada mes sin leads\nes dinero que\nno vuelve.',s:'Tienes el perfil. Te falta el flujo. Campa\u00f1as activas construyen un pipeline constante en tu mercado \u2014 sin depender de referidos ni de que el mercado te encuentre.'},
+  'no-follow':{h:'Tus leads\nest\u00e1n ah\u00ed.\nNadie los recoge.',s:'En Florida, el comprador que no recibe contacto en las primeras horas ya est\u00e1 hablando con otro realtor. El sistema responde en 30 segundos \u2014 yo hago el resto.'},
+  'no-close':{h:'El dinero entra.\nSe escapa antes\ndel cierre.',s:'Los leads que no cierran no son malos leads \u2014 son leads sin seguimiento y sin el momento justo. El sistema captura ese momento antes de que el lead se enfr\u00ede.'},
+  'all':{h:'Sin sistema,\nsin pipeline,\nsin cierres.',s:'No es un problema de esfuerzo ni de mercado. Los tres frentes tienen soluci\u00f3n y se pueden activar en 30 d\u00edas.'}
+};
+
+function buildWhyRec(){
+  const whyByProblem={
+    'no-leads':{
+      'arranque':'Empezamos con el presupuesto justo para tu operaci\u00f3n. Cuando el pipeline crezca, escalar es simple.',
+      'estandar':'Necesitas un flujo constante de leads calificados. Growth genera ese volumen desde el primer mes.',
+      'acelerado':'Tu operaci\u00f3n necesita volumen real y r\u00e1pido. Dominance arranca con el mayor presupuesto de anuncios.'
+    },
+    'no-follow':{
+      'arranque':'Tienes leads pero el seguimiento se cae. Pipeline contacta cada lead por ti \u2014 registrado, en secuencia, sin que t\u00fa muevas un dedo.',
+      'estandar':'El volumen que manejas necesita un seguimiento que no dependa de tu disponibilidad. Growth lo opera en paralelo.',
+      'acelerado':'Con el volumen que manejas, el seguimiento manual no escala. Dominance lo automatiza todo desde el arranque.'
+    },
+    'no-close':{
+      'arranque':'Pipeline contacta, filtra y te pasa solo a quien ya tiene intenci\u00f3n real de comprar.',
+      'estandar':'Growth genera nuevos leads y opera el proceso de contacto para que llegues a cada cita con contexto real.',
+      'acelerado':'Dominance genera el mayor volumen de leads contactados y opera el seguimiento hasta que el lead est\u00e1 listo para ti.'
+    },
+    'all':{
+      'arranque':'Empezamos por lo fundamental: leads constantes + seguimiento activo. Sin pasarse del presupuesto inicial.',
+      'estandar':'Los tres frentes activos al mismo tiempo: anuncios, seguimiento y contacto operados en paralelo.',
+      'acelerado':'Los tres frentes al m\u00e1ximo. Dominance genera el mayor volumen y opera el sistema completo desde el arranque.'
+    }
+  };
+  const crmNote={
+    'none':'Partimos de cero \u2014 el sistema arranca completo desde el d\u00eda 1, sin que tengas que aprender nada.',
+    'excel':'El seguimiento manual tiene techo. El sistema lo reemplaza y libera las horas que hoy pierdes en gesti\u00f3n.',
+    'unused':'Tienes el CRM pero sin el proceso que lo active. Yo opero esa parte \u2014 t\u00fa no tienes que tocarlo.',
+    'full':D.problem==='no-follow'
+      ?'Tienes el CRM pero el volumen de leads hace imposible el seguimiento manual. El sistema lo opera en paralelo sin que dependa de tu disponibilidad.'
+      :'Ya tienes base t\u00e9cnica. El gap est\u00e1 en qui\u00e9n opera el seguimiento y con qu\u00e9 velocidad \u2014 eso es exactamente lo que resuelve el sistema.'
+  }[D.crm]||'El sistema arranca completo desde el d\u00eda 1.';
+  const problemKey=D.problem||'all';
+  const planCopy=(whyByProblem[problemKey]||whyByProblem['all'])[recPlan]||'';
+  const planLabel={arranque:'Pipeline',estandar:'Growth',acelerado:'Dominance'}[recPlan];
+  return `<strong>Plan ${planLabel}.</strong> ${planCopy} ${crmNote}`;
+}
+
+const DIAG_TXT={
+  'no-leads-low':'Con <strong>{leads} leads/mes</strong> en el {mkt}, el flujo es limitado e irregular. Anuncios activos en Meta construyen un volumen constante y medible \u2014 sin esperar a que el mercado llegue solo.',
+  'no-leads-high':'Tienes volumen pero el flujo no es constante ni controlable. Anuncios activos generan leads de forma continua \u2014 sin depender de la temporada ni de referidos.',
+  'no-follow':'Con tu sistema actual est\u00e1s contactando aproximadamente el <strong>{cr}% de tus leads</strong>. Eso significa que cerca de <strong>{missed} leads al mes</strong> se enfr\u00edan antes de que alguien los llame \u2014 en el {mkt} ese tiempo es cr\u00edtico.',
+  'no-close-nocrm':'Tienes leads pero sin un proceso claro de contacto y seguimiento, los que est\u00e1n listos para comprar llegan sin el contexto necesario para cerrar. El sistema ordena ese proceso.',
+  'no-close-crm':'Tienes el CRM pero el problema est\u00e1 en el timing. Los leads que s\u00ed quieren comprar necesitan el contacto correcto en el momento correcto \u2014 eso es lo que opera el sistema.',
+  'all':'Est\u00e1s operando sin sistema en tres frentes. Con <strong>{leads} leads/mes</strong> en el {mkt}, el potencial est\u00e1 ah\u00ed. Lo que falta es lo que los captura, sigue y convierte.'
+};
+
+function calcDiagnosis(){
+  if(D.problem==='all'||D.leads==='vhigh'){recPlan='acelerado';}
+  else if(D.problem==='no-leads'||D.crm==='none'||D.crm==='excel'||(D.closes===0&&D.problem==='no-leads')){recPlan='estandar';}
+  else if(D.problem==='no-follow'&&(D.crm==='unused'||D.crm==='full')){recPlan='arranque';}
+  else{recPlan='estandar';}
+  const commission=D.price*0.025;
+  const missed=Math.round(D.leadsNum*(1-D.crmCR));
+  const monthlyLostRaw=Math.round(missed*0.025*commission);
+  const monthlyLost=Math.max(monthlyLostRaw,800);
+  const planIdx=PLANS.findIndex(p=>p.id===recPlan);
+  const adLeadsMid=[48,70,93][planIdx];
+  const cumulativeLeads=adLeadsMid*3;
+  const potentialBase=Math.round(cumulativeLeads*0.01*commission);
+  const potentialSystem=Math.round(cumulativeLeads*0.015*commission);
+  const potential=potentialSystem;
+  const sysOverhead=D.leadsNum>=30?24:D.leadsNum>=15?18:12;
+  const hoursSaved=Math.round(missed*2.5)+sysOverhead;
+  window._calc={commission,missed,monthlyLost,potential,hoursSaved,planIdx,adLeadsMid,cumulativeLeads,potentialBase,potentialSystem,sysOverhead};
+  const pi=PRICES.findIndex(p=>p===D.price);
+  if(pi>=0)selPrice=pi;
+  simPrice=D.price;
+  tlP=planIdx;roiP=planIdx;
+}
+
+function showResults(){
+  show('sc-res');
+  const c=window._calc;
+  const fmt=n=>'$'+n.toLocaleString('en-US');
+  const h=HERO[D.problem]||HERO['all'];
+  const mkt=getMkt();
+  document.getElementById('res-h1').innerHTML=h.h;
+  document.getElementById('res-sub').innerHTML=h.s;
+  let diagKey=D.problem;
+  if(D.problem==='no-leads'){diagKey=(D.leads==='vhigh'||D.leads==='high')?'no-leads-high':'no-leads-low';}
+  if(D.problem==='no-close'){diagKey=(D.crm==='unused'||D.crm==='full')?'no-close-crm':'no-close-nocrm';}
+  let dtxt=(DIAG_TXT[diagKey]||DIAG_TXT['all'])
+    .replace('{leads}',D.leadsNum).replace('{cr}',Math.round(D.crmCR*100))
+    .replace('{missed}',c.missed).replace(/\{mkt\}/g,mkt.seg);
+  document.getElementById('res-diag-txt').innerHTML=dtxt;
+  const lossIsOpportunity=(D.problem==='no-leads'||D.leadsNum<10);
+  const lossLabel=lossIsOpportunity?'Oportunidad sin capturar/a\u00f1o':'Fuga de capital/a\u00f1o';
+  const lossNote1=lossIsOpportunity
+    ?`Sin un sistema activo, esas oportunidades las captura otro realtor. Proyecci\u00f3n anual con comisi\u00f3n estimada de ${fmt(c.commission)} por cierre.`
+    :`${c.missed} leads org&aacute;nicos sin contactar/mes &times; 2.5% de conversi&oacute;n &times; comisi&oacute;n al 2.5% est&aacute;ndar de ${fmt(c.commission)} por cierre &times; 12 meses.`;
+  document.getElementById('loss-lbl-1').textContent=lossLabel;
+  if(document.getElementById('loss-note-lbl-1'))document.getElementById('loss-note-lbl-1').textContent=lossIsOpportunity?'Oportunidad:':'Fuga de capital:';
+  document.getElementById('loss-monthly').textContent=fmt(c.monthlyLost*12);
+  document.getElementById('loss-potential').textContent=fmt(c.potential);
+  document.getElementById('loss-hours').textContent='~'+c.hoursSaved+'h';
+  document.getElementById('loss-note-1').innerHTML=lossNote1;
+  document.getElementById('loss-note-2').innerHTML=`<strong>~${c.cumulativeLeads} leads en 3 meses.</strong> Con seguimiento activo (1.5%): ~${Math.round(c.cumulativeLeads*0.015)} cierres = <strong>${fmt(c.potentialSystem)}</strong>.`;
+  document.getElementById('loss-note-3').innerHTML=`<strong>~${c.sysOverhead}h/mes</strong> de gesti&oacute;n que el sistema opera sin que lo toques.`;
+  const pl=PLANS[c.planIdx];
+  document.getElementById('rec-plan-title').textContent='Plan '+pl.lbl;
+  document.getElementById('rec-leads').textContent=pl.leadsRange+'/mes';
+  document.getElementById('rec-cierre').textContent=pl.cierre;
+  document.getElementById('why-rec').innerHTML=buildWhyRec();
+}
+
+function calcAll(){calcDiagnosis();}
+function goToDeck(){
+  document.getElementById('ph-diag').classList.add('hidden');
+  document.querySelectorAll('.ui-tag,.loss-ticker').forEach(el=>el.style.display='none');
+  const deck=document.getElementById('ph-deck');
+  deck.classList.remove('hidden');
+  deck.classList.add('revealing');
+  setTimeout(()=>deck.classList.remove('revealing'),700);
+  window.scrollTo({top:0,behavior:'instant'});
+  buildDeck();
+}
+
+function buildDeck(){
+  const h=HERO[D.problem]||HERO['all'];
+  const mkt=getMkt();
+  document.getElementById('dk-hero').innerHTML=h.h;
+  document.getElementById('dk-hero-sub').innerHTML=h.s;
+
+  const lossRef=document.getElementById('dk-loss-ref');
+  if(lossRef&&window._calc){
+    const c=window._calc;
+    const fmt=n=>'$'+n.toLocaleString();
+    if(c.monthlyLost>0){
+      lossRef.innerHTML=`Tu diagn&oacute;stico: <strong>${fmt(c.monthlyLost*12)}/a&ntilde;o</strong> en leads sin seguimiento. Eso es lo que el sistema recupera.`;
+      lossRef.classList.add('visible');
+    }
+  }
+  
+  const badgeText='&#127968; '+mkt.seg.charAt(0).toUpperCase()+mkt.seg.slice(1);
+  ['mkt-badge-plans','mkt-badge-roi'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.innerHTML=badgeText;
+  });
+  
+  document.getElementById('plans-grid').innerHTML=PLANS.map(pl=>{
+    const isRec=pl.id===recPlan;
+    return`<div class="plan-c${isRec?' rec-highlight':''}">
+      ${isRec?'<div class="plan-badge">Tu plan recomendado</div>':''}
+      <div class="plan-nm">${pl.lbl}</div>
+      <div class="plan-p">$${pl.total.toLocaleString()}<sub>/mes</sub></div>
+      <div class="pr"><span>Ads</span><em>$${pl.ads}/mes</em></div>
+      <div class="pr"><span>Management</span><em>$800/mes</em></div>
+      <div class="pr"><span>CRM</span><em>~$200/mes</em></div>
+      <div class="pr"><span>Leads/mes</span><em>${pl.leadsRange}</em></div>
+      <div class="pr"><span>Cierre proyectado</span><em>${pl.cierre}</em></div>
+    </div>`;
+  }).join('');
+  buildSel('roi-sel',i=>{roiP=i;renderRoi();});renderRoi();
+
+  const sl=document.getElementById('price-slider');
+  if(sl){
+    sl.value=simPrice;
+    const disp=simPrice>=1000000?'$'+(simPrice/1000000).toFixed(2).replace('.00','')+'M':'$'+(simPrice/1000)+'K';
+    const dpEl=document.getElementById('price-display');
+    if(dpEl)dpEl.textContent=disp;
+    const pct=((simPrice-150000)/(1200000-150000))*100;
+    sl.style.background=`linear-gradient(to right,var(--g) 0%,var(--g) ${pct}%,#1a1a1a ${pct}%,#1a1a1a 100%)`;
+  }
+  
+  const cs=document.getElementById('comm-sel');
+  if(cs) {
+    cs.innerHTML='';
+    COMMS.forEach((c,i)=>{
+      const b=document.createElement('button');
+      b.className='comm-btn'+(i===selComm?' on':'');
+      b.textContent=CLABELS[i];
+      b.onclick=()=>{selComm=i;cs.querySelectorAll('.comm-btn').forEach((x,j)=>x.classList.toggle('on',j===i));updateSim();};
+      cs.appendChild(b);
+    });
+  }
+  updateSim();
+  setTimeout(()=>{initSistemaObserver();initSilenceObserver();},300);
+}
+
+function buildSel(id,fn){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.innerHTML='';
+  PLANS.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='ps-btn'+(i===roiP?' on':'');b.textContent=p.lbl;
+    b.onclick=()=>{fn(i);el.querySelectorAll('.ps-btn').forEach((x,j)=>x.classList.toggle('on',j===i));};
+    el.appendChild(b);
+  });
+}
+
+let simPrice=400000;
+
+function onPriceSlide(val){
+  simPrice=parseInt(val);
+  const disp=simPrice>=1000000?'$'+(simPrice/1000000).toFixed(2).replace('.00','')+'M':'$'+(simPrice/1000)+'K';
+  document.getElementById('price-display').textContent=disp;
+  const pct=((simPrice-150000)/(1200000-150000))*100;
+  document.getElementById('price-slider').style.background=
+    `linear-gradient(to right,var(--g) 0%,var(--g) ${pct}%,#1a1a1a ${pct}%,#1a1a1a 100%)`;
+  updateSim();
+}
+
+function updateSim(){
+  const comm=simPrice*COMMS[selComm];
+  const inv=PLANS[roiP].invNum;
+  const net=comm-inv;
+  const fmt=n=>'$'+n.toLocaleString('en-US');
+  
+  const simComm = document.getElementById('sim-comm');
+  if(simComm) simComm.textContent=fmt(Math.round(comm));
+  
+  const simInv = document.getElementById('sim-inv');
+  if(simInv) simInv.textContent=PLANS[roiP].inv;
+  
+  const ne=document.getElementById('sim-net');
+  const lbl=document.getElementById('sim-net-lbl');
+  if(ne) {
+    ne.style.fontSize='';
+    ne.style.color='';
+    if(net>=0){
+      ne.textContent='+'+fmt(Math.round(net));
+      ne.className='sim-num pos';
+      if(lbl)lbl.textContent='Ganancia neta (1 cierre)';
+    } else {
+      const needed=Math.ceil(inv/comm);
+      ne.textContent=needed+' cierres';
+      ne.className='sim-num';
+      if(lbl)lbl.textContent='Para cubrir la inversi\u00f3n';
+    }
+  }
+  const rr=document.getElementById('roi-ret');
+  if(rr){rr.textContent=net>=0?'+'+fmt(Math.abs(Math.round(net))):Math.ceil(inv/comm)+' cierres';rr.className='roi-val'+(net>=0?' gld':'');}
+}
+
+function renderRoi(){
+  const r=PLANS[roiP].roi;
+  const roiG = document.getElementById('roi-g');
+  if(roiG) {
+    roiG.innerHTML=`
+      <div class="roi-c"><div class="roi-lbl">Inversi&oacute;n (3 meses)</div><div class="roi-val">${PLANS[roiP].inv}</div></div>
+      <div class="roi-c"><div class="roi-lbl">Leads en 3 meses</div><div class="roi-val">${r.leads}</div></div>
+      <div class="roi-c"><div class="roi-lbl">Pre-aprobaciones</div><div class="roi-val">${r.pa}</div></div>
+      <div class="roi-c"><div class="roi-lbl">Contratos</div><div class="roi-val">${r.con}</div></div>
+      <div class="roi-c"><div class="roi-lbl">Cierres proyectados</div><div class="roi-val gld">${r.ci}</div></div>
+      <div class="roi-c"><div class="roi-lbl">Ganancia neta</div><div class="roi-val gld" id="roi-ret">\u2014</div></div>
+      <div style="grid-column:1/-1;font-size:11px;color:#555;padding-top:4px;line-height:1.6">* Proyecci&oacute;n al <strong style="color:#777">1.5% de conversi&oacute;n</strong> &mdash; est&aacute;ndar de tr&aacute;fico fr&iacute;o (1%) ajustado por contacto en 30s y seguimiento activo de 45 d&iacute;as. No incluye el fee de $700 por cierre confirmado.</div>`;
+  }
+  document.querySelectorAll('#roi-sel .ps-btn').forEach((b,i)=>b.classList.toggle('on',i===roiP));
+  updateSim();
+}
+
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item'),open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));
+  if(!open)item.classList.add('open');
+}
+
+/* ── INTERACTIVITY & OBSERVACIONES ── */
+document.addEventListener('mousemove', e => {
+  const light = document.getElementById('mouse-light');
+  if(light) {
+    light.classList.add('visible');
+    light.style.setProperty('--mx', e.clientX + 'px');
+    light.style.setProperty('--my', e.clientY + 'px');
+  }
+});
+
+function initSistemaObserver(){
+  let radarOn=false,waOn=false;
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const id=e.target.id;
+      if(id==='ss1'){e.target.classList.add('sin');setTimeout(()=>{if(!radarOn){radarOn=true;startRadar();}document.getElementById('sc1').classList.add('sfl');},500);}
+      if(id==='ss2'){e.target.classList.add('sin');setTimeout(()=>{if(!waOn){waOn=true;startWA();}document.getElementById('sc2').classList.add('sfl');},400);}
+      if(id==='ss3'){
+        e.target.classList.add('sin');
+        const now=new Date(),hh=now.getHours(),mm=(now.getMinutes()<10?'0':'')+now.getMinutes();
+        const pt=document.getElementById('s-ptime');if(pt)pt.textContent=hh+':'+mm;
+        const days=['Domingo','Lunes','Martes','Mi\u00e9rcoles','Jueves','Viernes','S\u00e1bado'];
+        const months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+        const pld=document.getElementById('s-plock-time');
+        if(pld)pld.textContent=days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()];
+        setTimeout(()=>{
+          const scr=document.getElementById('s-phone-screen');
+          if(scr){
+            scr.classList.add('awake');
+            const fl=document.getElementById('s-flash');
+            if(fl){fl.classList.add('pop');setTimeout(()=>fl.classList.remove('pop'),300);}
+          }
+        },600);
+        setTimeout(()=>{
+          const pn=document.getElementById('s-pnotif');
+          if(pn){
+            pn.classList.add('show');
+            try{
+              const ac=new(window.AudioContext||window.webkitAudioContext)();
+              const play=(freq,start,dur,vol=0.18)=>{
+                const o=ac.createOscillator(),g=ac.createGain();
+                o.connect(g);g.connect(ac.destination);
+                o.frequency.value=freq;o.type='sine';
+                g.gain.setValueAtTime(0,ac.currentTime+start);
+                g.gain.linearRampToValueAtTime(vol,ac.currentTime+start+.01);
+                g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+start+dur);
+                o.start(ac.currentTime+start);o.stop(ac.currentTime+start+dur+.05);
+              };
+              play(1318,0,.18);
+              play(1568,.1,.22);
+              play(2093,.22,.3);
+            }catch(e){}
+          }
+        },1400);
+        setTimeout(()=>{
+          document.querySelectorAll('[data-st]').forEach(el=>{
+            const t=+el.dataset.st,s=el.dataset.ss||'';
+            if(t===0)return;
+            let v=0;const iv=setInterval(()=>{v=Math.min(v+t/60,t);el.textContent=Math.round(v)+s;if(v>=t)clearInterval(iv);},18);
+          });
+        },900);
+      }
+      io.unobserve(e.target);
+    });
+  },{threshold:.35});
+	  ['ss1','ss2','ss3'].forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el);});
+}
+
+/* WELCOME REVEAL */
+function initWelcome(){
+  const items = document.querySelectorAll('.diag-fade');
+  items.forEach((item, i) => {
+    const delay = (parseFloat(item.style.getPropertyValue('--di')) || 0) * 150 + 100;
+    setTimeout(() => {
+      item.classList.remove('revealing');
+      item.classList.add('visible');
+    }, delay);
+  });
+}
+initWelcome();
+window.addEventListener('load', initWelcome);
+
+/* LOSS TICKER */
+function initTicker(){
+  let val = 0;
+  const el = document.getElementById('loss-ticker-val');
+  setInterval(() => {
+    val += 0.04;
+    if(el) el.textContent = '$' + val.toFixed(2);
+  }, 100);
+}
+initTicker();
+
+		  /* RADAR */
+  function startRadar(){
+    const cvs=document.getElementById('s-radar');if(!cvs)return;
+    const dpr=window.devicePixelRatio||1,W=cvs.offsetWidth,H=120;
+    cvs.width=W*dpr;cvs.height=H*dpr;
+    const ctx=cvs.getContext('2d');ctx.scale(dpr,dpr);
+    const cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;
+    let frame=0,rings=[],lead=null;
+    function tick(){
+      frame++;ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='rgba(212,175,55,0.035)';
+      for(let x=0;x<W;x+=22)for(let y=0;y<H;y+=22){ctx.beginPath();ctx.arc(x,y,.8,0,Math.PI*2);ctx.fill();}
+      [.18,.32,.45].forEach(f=>{ctx.beginPath();ctx.arc(cx,cy,R*f/.45,0,Math.PI*2);ctx.strokeStyle='rgba(212,175,55,0.05)';ctx.lineWidth=1;ctx.stroke();});
+      const sw=(frame*.018)%(Math.PI*2);
+      ctx.save();ctx.translate(cx,cy);ctx.rotate(sw);
+      const g=ctx.createLinearGradient(0,0,R,0);g.addColorStop(0,'rgba(212,175,55,0.2)');g.addColorStop(1,'rgba(212,175,55,0)');
+      ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,R,0,1.3);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.restore();
+      ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fillStyle='#D4AF37';ctx.fill();
+      rings=rings.filter(r=>{r.r+=1.4;r.a=Math.max(0,1-r.r/R);if(r.a<=0)return false;ctx.beginPath();ctx.arc(cx,cy,r.r,0,Math.PI*2);ctx.strokeStyle=`rgba(212,175,55,${r.a*.45})`;ctx.lineWidth=1.5;ctx.stroke();return true;});
+      if(frame%65===0)rings.push({r:6,a:1});
+      if(!lead&&frame>55){const a=Math.random()*Math.PI*2,d=50+Math.random()*25;lead={x:cx+Math.cos(a)*d,y:cy+Math.sin(a)*d,a:0,cap:false};}
+      if(lead){lead.a=Math.min(1,lead.a+.04);const la=Math.atan2(lead.y-cy,lead.x-cx),diff=((sw-la)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);if(diff<.15&&!lead.cap){lead.cap=true;rings.push({r:4,a:1});}ctx.beginPath();ctx.arc(lead.x,lead.y,5,0,Math.PI*2);ctx.fillStyle=`rgba(212,175,55,${lead.cap?.9:lead.a*.7})`;ctx.fill();}
+      requestAnimationFrame(tick);
+    }
+    rings.push({r:6,a:1});tick();
+  }
+
+  /* WHATSAPP */
+  function startWA(){
+    const chat=document.getElementById('s-chat');if(!chat)return;
+    let tids=[];
+    function el(tag,cls,html){const e=document.createElement(tag);e.className=cls;if(html)e.innerHTML=html;return e;}
+    function bub(side,txt,t,delay,cb){
+      const b=el('div',`s-bub ${side}`);b.innerHTML=`<span>${txt}</span><div class="s-bub-m">${t}${side==='sout'?' ✓✓':''}</div>`;
+      chat.appendChild(b);tids.push(setTimeout(()=>{b.classList.add('sv');chat.scrollTop=9999;if(cb)cb();},delay));
+    }
+    function typ(delay,dur,cb){
+      const t=el('div','s-typ');t.innerHTML='<div class="s-td"></div><div class="s-td"></div><div class="s-td"></div>';
+      tids.push(setTimeout(()=>{chat.appendChild(t);t.classList.add('sv');chat.scrollTop=9999;tids.push(setTimeout(()=>{t.remove();if(cb)cb();},dur));},delay));
+    }
+    function tag(txt,delay){const s=el('div','s-sys-tag');s.textContent=txt;chat.appendChild(s);tids.push(setTimeout(()=>{s.classList.add('sv');chat.scrollTop=9999;},delay));}
+    const now=new Date(),hh=now.getHours(),mm=(now.getMinutes()<10?'0':'')+now.getMinutes(),T=`${hh}:${mm}`;
+    tag('LEAD REGISTRADO',200);
+    bub('sin2','Hola, vi el anuncio. Me interesa saber más.',T,700);
+    typ(1500,1200,()=>bub('sout','¡Hola! ¿Buscas para comprar o rentar?',T,0,()=>{
+      bub('sin2','Comprar. Primera vivienda.',T,1200,()=>{
+        tag('CALIFICANDO...',400);
+        typ(900,1000,()=>bub('sout','¿Ya hablaste con un prestamista?',T,0,()=>{
+          bub('sin2','No, pero tengo buen crédito.',T,1200,()=>{
+            const sc=document.getElementById('s-score'),sf=document.getElementById('s-sf'),sv=document.getElementById('s-sv');
+            setTimeout(()=>{sc.classList.add('sv');sf.style.width='78%';let v=0;const iv=setInterval(()=>{v=Math.min(v+2,78);sv.textContent=v+'%';if(v>=78)clearInterval(iv);},22);},400);
+            typ(800,900,()=>bub('sout','¿Te va bien una llamada esta semana?',T,0,()=>{
+              bub('sin2','Sí, el jueves en la tarde.',T,1100,()=>{
+                tag('CITA BLOQUEADA — TRANSFERIDO AL REALTOR',500);
+                setTimeout(()=>{
+                  const mirrorMap={
+                    0:['❌','Tu Excel actual requeriría <strong>~2.5h de llamadas manuales</strong> para filtrar esto.','El sistema lo hizo en <em>12 segundos</em>.'],
+                    1:['⚠️','Sin sistema, este lead se habría enfriado antes del segundo contacto.','El sistema mantuvo la conversación <em>activa sin parar</em>.'],
+                    2:['🔄','Tu CRM sin usar no habría disparado ni un solo mensaje.','El sistema ejecutó <em>4 acciones automáticas</em> en este flujo.'],
+                    3:['✅','Tu sistema actual ya captura leads. El gap está en la <strong>velocidad de calificación</strong>.','Este flujo lo completó en <em>minutos, no días</em>.'],
+                  };
+                  const crmAns=typeof answers!=='undefined'&&answers.crm!=null?answers.crm:1;
+                  const m=mirrorMap[crmAns]||mirrorMap[1];
+                  const mirror=document.getElementById('s-mirror');
+                  if(mirror){
+                    mirror.innerHTML=`<span class="s-mirror-ico">${m[0]}</span><span class="s-mirror-txt">${m[1]} ${m[2]}</span>`;
+                    mirror.classList.add('sv');
+                  }
+                },800);
+              });
+            }));
+          });
+        }));
+      });
+    }));
+  }
+
+function initSilenceObserver(){
+  const sio=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const sl=e.target.querySelector('.silence-line');
+      if(sl)sl.classList.add('sin');
+      sio.unobserve(e.target);
+    });
+  },{threshold:.4});
+  ['sl1','sl2','sl3'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)sio.observe(el);
+  });
+}
+</script>
+</body>
+</html>
